@@ -87,15 +87,15 @@ app.add_middleware(
         "https://cashflowkrp.onrender.com"
     ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "DELETE", "PUT", "OPTIONS"],
+    allow_methods=["GET", "POST", "DELETE", "PUT", "OPTIONS", "HEAD"],
     allow_headers=["*"],
 )
 
 # Helper Indonesian Month Names
 MN_INDO = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember']
 
-# Health Check & Keep-Alive Endpoint
-@app.get("/api/health")
+# Health Check & Keep-Alive Endpoint (supports both GET and HEAD for UptimeRobot)
+@app.api_route("/api/health", methods=["GET", "HEAD"])
 async def health_check():
     return {
         "status": "healthy",
@@ -767,7 +767,7 @@ if not os.path.exists(static_dir):
 
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 async def serve_index():
     index_path = os.path.join(static_dir, "index.html")
     if os.path.exists(index_path):
