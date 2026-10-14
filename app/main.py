@@ -13,7 +13,8 @@ from .database import engine, Base, get_db
 from .models import User, Transaction, TruckSetting, AuditLog
 from .schemas import (
     UserLogin, UserResponse, UserChangePassword, Token,
-    TransactionCreate, TransactionResponse, TruckSettingSchema, DashboardSummary
+    TransactionCreate, TransactionResponse, TruckSettingSchema, DashboardSummary,
+    AdminPasswordReset, TruckSettingCreate, TruckSettingResponse
 )
 from .security import (
     get_password_hash, verify_password, create_access_token,
@@ -161,6 +162,22 @@ async def change_password(
     log_audit(db, request, "CHANGE_PASSWORD", "Password berhasil diubah", current_user)
     return {"message": "Password berhasil diperbarui."}
 
+@app.post("/api/owner/admin-password")
+async def reset_admin_password(
+    data: AdminPasswordReset,
+    request: Request,
+    current_user: User = Depends(require_owner),
+    db: Session = Depends(get_db)
+):
+    admin_user = db.query(User).filter(User.role == "admin").first()
+    if not admin_user:
+        raise HTTPException(status_code=404, detail="Akun admin tidak ditemukan.")
+    
+    admin_user.hashed_password = get_password_hash(data.new_password)
+    db.commit()
+    log_audit(db, request, "RESET_ADMIN_PASSWORD", f"Password admin '{admin_user.username}' diubah oleh Owner", current_user)
+    return {"message": f"Password untuk akun admin '{admin_user.username}' berhasil diperbarui."}
+
 # ============================================================
 # DASHBOARD API
 # ============================================================
@@ -190,8 +207,10 @@ async def get_dashboard(
     # Recent 5 transactions
     recent = db.query(Transaction).order_by(Transaction.date.desc(), Transaction.created_at.desc()).limit(5).all()
 
-    # Truck
-    truck = db.query(TruckSetting).first()
+    # Trucks
+    trucks = db.query(TruckSetting).order_by(TruckSetting.id.asc()).all()
+    truck_count = len(trucks)
+    first_truck = trucks[0] if trucks else None
 
     return {
         "saldo": saldo,
@@ -212,14 +231,26 @@ async def get_dashboard(
                 "created_by_name": t.created_by_name
             } for t in recent
         ],
+        "truck_count": truck_count,
+        "trucks": [
+            {
+                "id": t.id,
+                "nopol": t.nopol or "",
+                "jenis": t.jenis or "",
+                "kapasitas": t.kapasitas or "",
+                "tahun": t.tahun,
+                "status": t.status or "",
+                "cicilan": t.cicilan or 0.0
+            } for t in trucks
+        ],
         "truck": {
-            "nopol": truck.nopol if truck else "–",
-            "jenis": truck.jenis if truck else "Belum diisi",
-            "kapasitas": truck.kapasitas if truck else "",
-            "tahun": truck.tahun if truck else None,
-            "status": truck.status if truck else "",
-            "cicilan": truck.cicilan if truck else 0.0
-        } if truck else None
+            "nopol": first_truck.nopol if first_truck else "–",
+            "jenis": first_truck.jenis if first_truck else "Belum diisi",
+            "kapasitas": first_truck.kapasitas if first_truck else "",
+            "tahun": first_truck.tahun if first_truck else None,
+            "status": first_truck.status if first_truck else "",
+            "cicilan": first_truck.cicilan if first_truck else 0.0
+        } if first_truck else None
     }
 
 # ============================================================
@@ -452,17 +483,91 @@ async def report_monthly(
     }
 
 # ============================================================
-# TRUCK SETTINGS API
+# TRUCK / FLEET SETTINGS API
 # ============================================================
+@app.get("/api/trucks", response_model=List[TruckSettingResponse])
+async def list_trucks(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Mendapatkan daftar semua unit armada truk."""
+    return db.query(TruckSetting).order_by(TruckSetting.id.asc()).all()
+
+@app.post("/api/trucks", status_code=status.HTTP_201_CREATED, response_model=TruckSettingResponse)
+async def create_truck(
+    payload: TruckSettingCreate,
+    request: Request,
+    current_user: User = Depends(require_owner),
+    db: Session = Depends(get_db)
+):
+    """Menambah unit armada baru (Owner Only)."""
+    truck = TruckSetting(
+        nopol=payload.nopol.upper(),
+        jenis=payload.jenis,
+        kapasitas=payload.kapasitas,
+        tahun=payload.tahun,
+        status=payload.status,
+        cicilan=payload.cicilan or 0.0
+    )
+    db.add(truck)
+    db.commit()
+    db.refresh(truck)
+    log_audit(db, request, "CREATE_TRUCK", f"Tambah unit nopol {truck.nopol}", current_user)
+    return truck
+
+@app.put("/api/trucks/{truck_id}", response_model=TruckSettingResponse)
+async def update_truck(
+    truck_id: int,
+    payload: TruckSettingCreate,
+    request: Request,
+    current_user: User = Depends(require_owner),
+    db: Session = Depends(get_db)
+):
+    """Memperbarui informasi unit armada (Owner Only)."""
+    truck = db.query(TruckSetting).filter(TruckSetting.id == truck_id).first()
+    if not truck:
+        raise HTTPException(status_code=404, detail="Unit armada tidak ditemukan.")
+
+    truck.nopol = payload.nopol.upper()
+    truck.jenis = payload.jenis
+    truck.kapasitas = payload.kapasitas
+    truck.tahun = payload.tahun
+    truck.status = payload.status
+    truck.cicilan = payload.cicilan or 0.0
+    db.commit()
+    db.refresh(truck)
+    log_audit(db, request, "UPDATE_TRUCK", f"Update unit nopol {truck.nopol}", current_user)
+    return truck
+
+@app.delete("/api/trucks/{truck_id}")
+async def delete_truck(
+    truck_id: int,
+    request: Request,
+    current_user: User = Depends(require_owner),
+    db: Session = Depends(get_db)
+):
+    """Menghapus / mengurangi unit armada dari daftar (Owner Only)."""
+    truck = db.query(TruckSetting).filter(TruckSetting.id == truck_id).first()
+    if not truck:
+        raise HTTPException(status_code=404, detail="Unit armada tidak ditemukan.")
+
+    nopol = truck.nopol
+    db.delete(truck)
+    db.commit()
+    log_audit(db, request, "DELETE_TRUCK", f"Hapus unit nopol {nopol}", current_user)
+    return {"message": f"Unit armada {nopol} berhasil dihapus."}
+
 @app.get("/api/truck")
 async def get_truck_setting(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    """Endpoint kompatibilitas untuk unit armada pertama."""
     truck = db.query(TruckSetting).first()
     if not truck:
         return {}
     return {
+        "id": truck.id,
         "nopol": truck.nopol,
         "jenis": truck.jenis,
         "kapasitas": truck.kapasitas,
@@ -475,15 +580,16 @@ async def get_truck_setting(
 async def save_truck_setting(
     payload: TruckSettingSchema,
     request: Request,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_owner),
     db: Session = Depends(get_db)
 ):
+    """Endpoint kompatibilitas untuk update unit armada pertama."""
     truck = db.query(TruckSetting).first()
     if not truck:
         truck = TruckSetting()
         db.add(truck)
 
-    truck.nopol = payload.nopol
+    truck.nopol = payload.nopol.upper() if payload.nopol else ""
     truck.jenis = payload.jenis
     truck.kapasitas = payload.kapasitas
     truck.tahun = payload.tahun
@@ -503,20 +609,31 @@ async def export_backup(
     db: Session = Depends(get_db)
 ):
     all_trx = db.query(Transaction).all()
-    truck = db.query(TruckSetting).first()
+    trucks = db.query(TruckSetting).order_by(TruckSetting.id.asc()).all()
+    first_truck = trucks[0] if trucks else None
 
     return {
         "company": "PT KYNAN RAHARJA PRATAMA",
         "exported_at": datetime.utcnow().isoformat(),
         "exported_by": current_user.username,
+        "trucks": [
+            {
+                "nopol": t.nopol or "",
+                "jenis": t.jenis or "",
+                "kapasitas": t.kapasitas or "",
+                "tahun": t.tahun,
+                "status": t.status or "",
+                "cicilan": t.cicilan or 0.0
+            } for t in trucks
+        ],
         "truck": {
-            "nopol": truck.nopol if truck else "",
-            "jenis": truck.jenis if truck else "",
-            "kapasitas": truck.kapasitas if truck else "",
-            "tahun": truck.tahun if truck else None,
-            "status": truck.status if truck else "",
-            "cicilan": truck.cicilan if truck else 0.0
-        } if truck else {},
+            "nopol": first_truck.nopol if first_truck else "",
+            "jenis": first_truck.jenis if first_truck else "",
+            "kapasitas": first_truck.kapasitas if first_truck else "",
+            "tahun": first_truck.tahun if first_truck else None,
+            "status": first_truck.status if first_truck else "",
+            "cicilan": first_truck.cicilan if first_truck else 0.0
+        } if first_truck else {},
         "transactions": [
             {
                 "id": t.id,
@@ -540,6 +657,7 @@ async def import_backup(
     db: Session = Depends(get_db)
 ):
     raw_trx = payload.get("transactions", [])
+    raw_trucks = payload.get("trucks", [])
     raw_truck = payload.get("truck", {})
 
     imported_count = 0
@@ -568,13 +686,36 @@ async def import_backup(
         db.add(trx)
         imported_count += 1
 
-    if raw_truck and isinstance(raw_truck, dict):
+    if raw_trucks and isinstance(raw_trucks, list):
+        for rt in raw_trucks:
+            if not isinstance(rt, dict) or not rt.get("nopol"):
+                continue
+            nopol_str = str(rt["nopol"]).strip().upper()
+            existing = db.query(TruckSetting).filter(TruckSetting.nopol == nopol_str).first()
+            if not existing:
+                existing = TruckSetting()
+                db.add(existing)
+            existing.nopol = nopol_str
+            existing.jenis = str(rt.get("jenis", "")).strip()
+            existing.kapasitas = str(rt.get("kapasitas", "")).strip()
+            if rt.get("tahun"):
+                try:
+                    existing.tahun = int(rt["tahun"])
+                except (ValueError, TypeError):
+                    pass
+            existing.status = str(rt.get("status", "")).strip()
+            if "cicilan" in rt:
+                try:
+                    existing.cicilan = float(rt["cicilan"])
+                except (ValueError, TypeError):
+                    pass
+    elif raw_truck and isinstance(raw_truck, dict):
         truck = db.query(TruckSetting).first()
         if not truck:
             truck = TruckSetting()
             db.add(truck)
         if raw_truck.get("nopol"):
-            truck.nopol = str(raw_truck["nopol"]).strip()
+            truck.nopol = str(raw_truck["nopol"]).strip().upper()
         if raw_truck.get("jenis"):
             truck.jenis = str(raw_truck["jenis"]).strip()
         if raw_truck.get("kapasitas"):

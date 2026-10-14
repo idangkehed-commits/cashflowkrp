@@ -85,7 +85,80 @@ def test_full_flow():
     assert r_del.status_code == 200
     print("[OK] Transaction deletion verified successfully")
 
-    # 8. Clean up test database
+    # 8. Test Admin Password Change by Owner
+    r_adm_change_forbidden = client.post("/api/owner/admin-password", headers=admin_headers, json={"new_password": "NewAdminPass123!"})
+    assert r_adm_change_forbidden.status_code == 403, f"Admin shouldn't be able to call owner password endpoint: {r_adm_change_forbidden.status_code}"
+
+    r_adm_change_ok = client.post("/api/owner/admin-password", headers=owner_headers, json={"new_password": "NewAdminPass123!"})
+    assert r_adm_change_ok.status_code == 200
+    print("[OK] Owner changed Admin password successfully")
+
+    # Verify admin can login with new password
+    r_login_new_adm = client.post("/api/auth/login", json={"username": "admin", "password": "NewAdminPass123!"})
+    assert r_login_new_adm.status_code == 200
+    new_admin_token = r_login_new_adm.json()["access_token"]
+    new_admin_headers = {"Authorization": f"Bearer {new_admin_token}"}
+    print("[OK] Admin verified login with newly set password")
+
+    # Restore admin password for default compatibility
+    client.post("/api/owner/admin-password", headers=owner_headers, json={"new_password": "AdminKRP2026!"})
+
+    # 9. Test Fleet Management (Kelola Unit Armada - Tambah & Kurangi Unit)
+    r_trucks = client.get("/api/trucks", headers=admin_headers)
+    assert r_trucks.status_code == 200
+    initial_truck_count = len(r_trucks.json())
+
+    # Admin cannot add truck
+    r_truck_admin_add = client.post("/api/trucks", headers=new_admin_headers, json={
+        "nopol": "D 1234 KRP",
+        "jenis": "Truk Box",
+        "kapasitas": "5 Ton",
+        "tahun": 2024,
+        "status": "Milik Sendiri (Lunas)",
+        "cicilan": 0.0
+    })
+    assert r_truck_admin_add.status_code == 403
+
+    # Owner adds truck (Tambah unit)
+    r_truck_add = client.post("/api/trucks", headers=owner_headers, json={
+        "nopol": "D 1234 KRP",
+        "jenis": "Truk Box",
+        "kapasitas": "5 Ton",
+        "tahun": 2024,
+        "status": "Milik Sendiri (Lunas)",
+        "cicilan": 0.0
+    })
+    assert r_truck_add.status_code == 201
+    new_truck_id = r_truck_add.json()["id"]
+    assert r_truck_add.json()["nopol"] == "D 1234 KRP"
+    print("[OK] Owner successfully added new truck unit")
+
+    # Verify list count increased
+    r_trucks_after = client.get("/api/trucks", headers=owner_headers)
+    assert len(r_trucks_after.json()) == initial_truck_count + 1
+
+    # Owner updates truck
+    r_truck_upd = client.put(f"/api/trucks/{new_truck_id}", headers=owner_headers, json={
+        "nopol": "D 1234 KRP",
+        "jenis": "Truk Box Pendingin",
+        "kapasitas": "6 Ton",
+        "tahun": 2024,
+        "status": "Milik Sendiri (Lunas)",
+        "cicilan": 0.0
+    })
+    assert r_truck_upd.status_code == 200
+    assert r_truck_upd.json()["jenis"] == "Truk Box Pendingin"
+
+    # Owner deletes truck (Kurangi unit)
+    r_truck_del = client.delete(f"/api/trucks/{new_truck_id}", headers=owner_headers)
+    assert r_truck_del.status_code == 200
+    print("[OK] Owner successfully deleted (reduced) truck unit")
+
+    # Verify list count back to initial
+    r_trucks_final = client.get("/api/trucks", headers=owner_headers)
+    assert len(r_trucks_final.json()) == initial_truck_count
+
+    # 10. Clean up test database
     r_clear = client.delete("/api/backup/clear", headers=owner_headers)
     assert r_clear.status_code == 200
     print("[OK] Database cleaned up to pristine state")

@@ -55,6 +55,9 @@ class TransactionResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class AdminPasswordReset(BaseModel):
+    new_password: str = Field(..., min_length=6, max_length=100)
+
 class TruckSettingSchema(BaseModel):
     nopol: Optional[str] = Field(default="", max_length=30)
     jenis: Optional[str] = Field(default="", max_length=50)
@@ -73,6 +76,33 @@ class TruckSettingSchema(BaseModel):
     class Config:
         from_attributes = True
 
+class TruckSettingCreate(BaseModel):
+    nopol: str = Field(..., min_length=3, max_length=30)
+    jenis: Optional[str] = Field(default="", max_length=50)
+    kapasitas: Optional[str] = Field(default="", max_length=50)
+    tahun: Optional[int] = Field(default=None)
+    status: Optional[str] = Field(default="", max_length=50)
+    cicilan: Optional[float] = Field(default=0.0)
+
+    @field_validator("nopol", "jenis", "kapasitas", "status")
+    @classmethod
+    def sanitize(cls, v: Optional[str]) -> str:
+        if v is None:
+            return ""
+        return html.escape(v.strip())
+
+class TruckSettingResponse(BaseModel):
+    id: int
+    nopol: Optional[str] = ""
+    jenis: Optional[str] = ""
+    kapasitas: Optional[str] = ""
+    tahun: Optional[int] = None
+    status: Optional[str] = ""
+    cicilan: Optional[float] = 0.0
+
+    class Config:
+        from_attributes = True
+
 class DashboardSummary(BaseModel):
     saldo: float
     income_month: float
@@ -81,3 +111,5 @@ class DashboardSummary(BaseModel):
     month_name: str
     recent_transactions: List[TransactionResponse]
     truck: Optional[TruckSettingSchema] = None
+    truck_count: Optional[int] = 0
+    trucks: Optional[List[TruckSettingResponse]] = []

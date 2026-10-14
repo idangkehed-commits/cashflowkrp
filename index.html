@@ -940,52 +940,26 @@ tbody tr:active { background: var(--bg); }
     <!-- ========== PENGATURAN ========== -->
     <div class="page" id="page-pengaturan">
       <div class="g2">
-        <div class="card">
-          <div class="card-title">🚛 Data Kendaraan</div>
-          <form onsubmit="saveTruck(event)">
-            <div class="fg" style="margin-bottom:12px;">
-              <label>Nomor Polisi *</label>
-              <input type="text" id="tNopol" placeholder="Contoh: B 1234 XY" style="text-transform:uppercase;" autocomplete="off">
+        <!-- Card: Kelola Unit Armada (Full Width) -->
+        <div class="card" style="grid-column: 1 / -1;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+            <div class="card-title" style="margin:0; display:flex; align-items:center; gap:8px;">
+              <span>🚛 Kelola Unit Armada</span>
+              <span id="truckCountBadge" class="badge" style="background:#fef3c7; color:#92400e; font-size:11.5px; border:1px solid #fde68a;">0 Unit</span>
             </div>
-            <div class="fg" style="margin-bottom:12px;">
-              <label>Jenis Truk</label>
-              <select id="tJenis">
-                <option value="Truk Engkel">Truk Engkel</option>
-                <option value="Truk Fuso (CDD)">Truk Fuso (CDD)</option>
-                <option value="Truk CDE">Truk CDE</option>
-                <option value="Truk Trailer">Truk Trailer</option>
-                <option value="Truk Box">Truk Box</option>
-                <option value="Truk Flatbed">Truk Flatbed</option>
-                <option value="Lainnya">Lainnya</option>
-              </select>
-            </div>
-            <div class="fg" style="margin-bottom:12px;">
-              <label>Kapasitas Muatan</label>
-              <input type="text" id="tKapasitas" placeholder="Contoh: 8 ton">
-            </div>
-            <div class="fg" style="margin-bottom:12px;">
-              <label>Tahun Kendaraan</label>
-              <input type="number" id="tTahun" placeholder="Contoh: 2022" min="1990" max="2030" inputmode="numeric">
-            </div>
-            <div class="fg" style="margin-bottom:12px;">
-              <label>Status Kepemilikan</label>
-              <select id="tStatus">
-                <option value="Milik Sendiri (Lunas)">Milik Sendiri (Lunas)</option>
-                <option value="Kredit / Cicilan">Kredit / Cicilan</option>
-                <option value="Leasing">Leasing</option>
-              </select>
-            </div>
-            <div class="fg" style="margin-bottom:16px;">
-              <label>Angsuran / Cicilan per Bulan</label>
-              <input type="text" id="tCicilan" placeholder="Rp 0" oninput="fmtAmt(this)" inputmode="numeric">
-            </div>
-            <button type="submit" id="btnSaveTruck" class="btn btn-primary btn-full owner-only">💾 Simpan Data Kendaraan</button>
-          </form>
+            <button type="button" class="btn btn-sm btn-primary owner-only" onclick="openTruckModal()">➕ Tambah Unit Armada</button>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:14px; line-height:1.4;">
+            Kelola data kendaraan operasional PT KYNAN RAHARJA PRATAMA. Anda dapat menambahkan armada baru atau mengurangi/menghapus unit yang sudah tidak beroperasi.
+          </div>
+          <div id="trucksList">
+            <div class="empty" style="padding:20px 0;"><div class="ei">⏳</div><p>Memuat daftar armada...</p></div>
+          </div>
         </div>
 
-        <!-- Card: Ganti Password -->
+        <!-- Card: Ganti Password Akun Sendiri -->
         <div class="card">
-          <div class="card-title">🔐 Ganti Password Akun</div>
+          <div class="card-title">🔐 Ganti Password Akun Saya</div>
           <form onsubmit="handleChangePassword(event)">
             <div class="fg" style="margin-bottom:12px;">
               <label>Password Saat Ini *</label>
@@ -999,7 +973,26 @@ tbody tr:active { background: var(--bg); }
               <label>Konfirmasi Password Baru *</label>
               <input type="password" id="pwdConfirm" required minlength="8" placeholder="Ulangi password baru">
             </div>
-            <button type="submit" class="btn btn-primary btn-full">🔑 Perbarui Password</button>
+            <button type="submit" class="btn btn-primary btn-full">🔑 Perbarui Password Saya</button>
+          </form>
+        </div>
+
+        <!-- Card: Ganti Password Admin (Owner Only) -->
+        <div class="card owner-only">
+          <div class="card-title">🛡️ Ganti Password Akun Admin</div>
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:10px 12px; border-radius:8px; margin-bottom:14px; font-size:12px; color:#1e40af; line-height:1.4;">
+            <strong>Khusus Owner:</strong> Anda dapat mengatur ulang kata sandi staf Admin operasional langsung tanpa memerlukan password lama mereka.
+          </div>
+          <form onsubmit="handleAdminPasswordChange(event)">
+            <div class="fg" style="margin-bottom:12px;">
+              <label>Password Baru Admin *</label>
+              <input type="password" id="adminPwdNew" required minlength="8" placeholder="Minimal 8 karakter">
+            </div>
+            <div class="fg" style="margin-bottom:16px;">
+              <label>Konfirmasi Password Baru Admin *</label>
+              <input type="password" id="adminPwdConfirm" required minlength="8" placeholder="Ulangi password baru admin">
+            </div>
+            <button type="submit" id="btnSubmitAdminPwd" class="btn btn-primary btn-full">🔑 Simpan Password Admin Baru</button>
           </form>
         </div>
 
@@ -1032,9 +1025,9 @@ tbody tr:active { background: var(--bg); }
           <div style="background:var(--bg); padding:12px 14px; border-radius:10px; font-size:13px; line-height:1.9;">
             <div><strong>Perusahaan:</strong> PT KYNAN RAHARJA PRATAMA</div>
             <div><strong>Bidang:</strong> Ekspedisi Penyewaan Truk Tanpa Sopir</div>
-            <div><strong>Armada:</strong> 1 Unit (CDD / Fuso)</div>
+            <div><strong>Armada:</strong> <span id="infoArmadaCount">Memuat...</span></div>
             <div><strong>Backend:</strong> Python 3.10 + FastAPI + PostgreSQL</div>
-            <div><strong>Versi Sistem:</strong> 2.0.0 (Secure Database Edition)</div>
+            <div><strong>Versi Sistem:</strong> 2.1.0 (Fleet &amp; RBAC Enhanced)</div>
           </div>
         </div>
       </div>
@@ -1087,6 +1080,80 @@ tbody tr:active { background: var(--bg); }
     <div class="modal-foot">
       <button class="btn btn-secondary" onclick="closeModal('delModal')">Batal</button>
       <button class="btn btn-danger"    id="delConfirmBtn">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Tambah / Edit Unit Armada -->
+<div class="overlay" id="truckModal">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-head">
+      <h3 id="truckModalTitle">🚛 Tambah Unit Armada</h3>
+      <button class="modal-x" onclick="closeModal('truckModal')">✕</button>
+    </div>
+    <form id="truckForm" onsubmit="submitTruckForm(event)">
+      <div class="modal-body" style="padding:16px 20px;">
+        <input type="hidden" id="tmId">
+        <div class="fg" style="margin-bottom:12px;">
+          <label>Nomor Polisi (Plat Truk) *</label>
+          <input type="text" id="tmNopol" required placeholder="Contoh: B 9876 KRP" style="text-transform:uppercase;" autocomplete="off">
+        </div>
+        <div class="fg" style="margin-bottom:12px;">
+          <label>Jenis Truk *</label>
+          <select id="tmJenis" required>
+            <option value="Truk Fuso (CDD)">Truk Fuso (CDD)</option>
+            <option value="Truk Engkel">Truk Engkel</option>
+            <option value="Truk CDE">Truk CDE</option>
+            <option value="Truk Trailer">Truk Trailer</option>
+            <option value="Truk Box">Truk Box</option>
+            <option value="Truk Flatbed">Truk Flatbed</option>
+            <option value="Pick Up">Pick Up</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div class="fg" style="margin-bottom:12px;">
+          <label>Kapasitas Muatan</label>
+          <input type="text" id="tmKapasitas" placeholder="Contoh: 8 Ton">
+        </div>
+        <div class="fg" style="margin-bottom:12px;">
+          <label>Tahun Kendaraan</label>
+          <input type="number" id="tmTahun" placeholder="Contoh: 2023" min="1990" max="2035" inputmode="numeric">
+        </div>
+        <div class="fg" style="margin-bottom:12px;">
+          <label>Status Kepemilikan</label>
+          <select id="tmStatus">
+            <option value="Milik Sendiri (Lunas)">Milik Sendiri (Lunas)</option>
+            <option value="Kredit / Cicilan">Kredit / Cicilan</option>
+            <option value="Leasing">Leasing</option>
+            <option value="Sewa">Sewa</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Angsuran / Cicilan per Bulan</label>
+          <input type="text" id="tmCicilan" placeholder="Rp 0" oninput="fmtAmt(this)" inputmode="numeric">
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('truckModal')">Batal</button>
+        <button type="submit" id="tmSubmitBtn" class="btn btn-primary">💾 Simpan Unit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Konfirmasi Hapus Unit Armada -->
+<div class="overlay" id="delTruckModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>⚠️ Hapus Unit Armada</h3>
+      <button class="modal-x" onclick="closeModal('delTruckModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      Apakah Anda yakin ingin menghapus unit armada <strong id="delTruckNopolText">–</strong>? Unit ini akan dikurangi dari daftar armada PT KYNAN RAHARJA PRATAMA.
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" onclick="closeModal('delTruckModal')">Batal</button>
+      <button type="button" class="btn btn-danger" id="delTruckConfirmBtn" onclick="doDeleteTruck()">🗑️ Hapus Unit</button>
     </div>
   </div>
 </div>
@@ -1241,6 +1308,12 @@ const API = {
       body: JSON.stringify({ old_password, new_password })
     });
   },
+  async resetAdminPassword(new_password) {
+    return await this.request('/api/owner/admin-password', {
+      method: 'POST',
+      body: JSON.stringify({ new_password })
+    });
+  },
   async getDashboard() {
     return await this.request('/api/dashboard');
   },
@@ -1265,6 +1338,26 @@ const API = {
   },
   async getMonthlyReport(month) {
     return await this.request(`/api/reports/monthly?month=${encodeURIComponent(month)}`);
+  },
+  async getTrucks() {
+    return await this.request('/api/trucks');
+  },
+  async createTruck(truckData) {
+    return await this.request('/api/trucks', {
+      method: 'POST',
+      body: JSON.stringify(truckData)
+    });
+  },
+  async updateTruck(id, truckData) {
+    return await this.request(`/api/trucks/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(truckData)
+    });
+  },
+  async deleteTruck(id) {
+    return await this.request(`/api/trucks/${id}`, {
+      method: 'DELETE'
+    });
   },
   async getTruck() {
     return await this.request('/api/truck');
@@ -1370,11 +1463,7 @@ function updateUserUI() {
       el.style.display = isOwner ? '' : 'none';
     });
 
-    // Disable truck form for non-owners
-    const truckInputs = document.querySelectorAll('#page-pengaturan form:first-of-type input, #page-pengaturan form:first-of-type select');
-    truckInputs.forEach(inp => {
-      inp.disabled = !isOwner;
-    });
+    renderTrucksList();
   } else {
     badgeWrap.style.display = 'none';
   }
@@ -1455,7 +1544,7 @@ async function nav(page) {
   if (page==='riwayat')   await renderRiwayat();
   if (page==='mingguan')  await initWeekPicker();
   if (page==='bulanan')   await initMonthPicker();
-  if (page==='pengaturan') { await loadTruckForm(); }
+  if (page==='pengaturan') { await loadTrucks(); }
 
   closeSidebar();
   // Scroll to top
@@ -1488,9 +1577,15 @@ async function renderDash() {
     $('d-income').textContent = rp(data.income_month);
     $('d-expense').textContent = rp(data.expense_month);
 
-    if (data.truck && data.truck.nopol) {
-      $('d-truck-nopol').textContent = data.truck.nopol;
-      $('d-truck-info').textContent  = data.truck.jenis || '';
+    const count = data.truck_count || (data.trucks ? data.trucks.length : (data.truck && data.truck.nopol ? 1 : 0));
+    $('d-truck-nopol').textContent = count > 0 ? `${count} Unit Armada` : 'Belum Ada Truk';
+    if (data.trucks && data.trucks.length > 0) {
+      const nopols = data.trucks.map(t => t.nopol).join(', ');
+      $('d-truck-info').textContent = nopols.length > 25 ? nopols.slice(0, 22) + '...' : nopols;
+    } else if (data.truck && data.truck.nopol) {
+      $('d-truck-info').textContent = data.truck.nopol;
+    } else {
+      $('d-truck-info').textContent = 'Klik Pengaturan untuk menambah';
     }
 
     // Recent: use cards (mobile-friendly)
@@ -1947,40 +2042,167 @@ async function renderBulanan() {
 // ============================================================
 // PENGATURAN
 // ============================================================
-async function loadTruckForm() {
+let currentTrucks = [];
+let pendingDeleteTruckId = null;
+
+async function loadTrucks() {
   try {
-    const t = await API.getTruck();
-    const $ = id=>document.getElementById(id);
-    if(t.nopol)    $('tNopol').value    = t.nopol;
-    if(t.jenis)    $('tJenis').value    = t.jenis;
-    if(t.kapasitas)$('tKapasitas').value= t.kapasitas;
-    if(t.tahun)    $('tTahun').value    = t.tahun;
-    if(t.status)   $('tStatus').value   = t.status;
-    if(t.cicilan!==undefined) $('tCicilan').value = t.cicilan ? t.cicilan.toLocaleString('id-ID') : '';
+    const trucks = await API.getTrucks();
+    currentTrucks = trucks || [];
+    renderTrucksList();
+    const badge = document.getElementById('truckCountBadge');
+    if (badge) badge.textContent = `${currentTrucks.length} Unit`;
+    const infoArmada = document.getElementById('infoArmadaCount');
+    if (infoArmada) {
+      const nopols = currentTrucks.map(t=>t.nopol).join(', ');
+      infoArmada.textContent = currentTrucks.length > 0 ? `${currentTrucks.length} Unit (${nopols})` : '0 Unit';
+    }
   } catch (err) {
-    console.error('Error loadTruckForm:', err);
+    console.error('Error loadTrucks:', err);
   }
 }
 
-async function saveTruck(e) {
-  e.preventDefault();
-  if (!currentUser || currentUser.role !== 'owner') {
-    toast('⛔ Hanya Owner yang berwenang mengubah data armada.', 'error');
+function renderTrucksList() {
+  const container = document.getElementById('trucksList');
+  if (!container) return;
+
+  const isOwner = currentUser && currentUser.role === 'owner';
+
+  if (!currentTrucks || currentTrucks.length === 0) {
+    container.innerHTML = `
+      <div class="empty" style="padding:22px 10px;">
+        <div class="ei" style="font-size:32px;">🚛</div>
+        <p style="margin:4px 0 10px;">Belum ada unit armada terdaftar.</p>
+        ${isOwner ? `<button type="button" class="btn btn-sm btn-primary" onclick="openTruckModal()">➕ Tambah Unit Pertama</button>` : ''}
+      </div>`;
     return;
   }
+
+  container.innerHTML = currentTrucks.map(t => `
+    <div style="background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:200px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px; flex-wrap:wrap;">
+          <span style="font-size:16px;">🚛</span>
+          <span style="font-weight:800; font-size:14px; color:var(--text); letter-spacing:0.5px;">${t.nopol}</span>
+          <span class="badge" style="background:#e0f2fe; color:#0369a1; font-size:10.5px;">${t.jenis || 'Truk'}</span>
+          <span class="badge" style="background:#dcfce7; color:#15803d; font-size:10.5px;">${t.status || 'Milik Sendiri'}</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+          <span>Muatan: <strong>${t.kapasitas || '–'}</strong></span> · 
+          <span>Tahun: <strong>${t.tahun || '–'}</strong></span>
+          ${t.cicilan > 0 ? ` · <span>Cicilan: <strong style="color:var(--danger);">${rp(t.cicilan)}/bln</strong></span>` : ''}
+        </div>
+      </div>
+      ${isOwner ? `
+      <div style="display:flex; gap:6px; flex-shrink:0;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="editTruck(${t.id})" style="padding:5px 10px; font-size:11.5px; border-radius:6px;" title="Ubah data unit">✏️ Edit</button>
+        <button type="button" class="btn btn-sm btn-danger" onclick="confirmDeleteTruck(${t.id}, '${t.nopol}')" style="padding:5px 10px; font-size:11.5px; border-radius:6px;" title="Kurangi / hapus unit">🗑️ Hapus</button>
+      </div>` : ''}
+    </div>
+  `).join('');
+}
+
+function openTruckModal(truck = null) {
+  if (!currentUser || currentUser.role !== 'owner') {
+    toast('⛔ Hanya Owner yang berwenang mengelola armada.', 'error');
+    return;
+  }
+  const $ = id => document.getElementById(id);
+  $('truckForm').reset();
+  if (truck) {
+    $('truckModalTitle').textContent = '✏️ Edit Unit Armada';
+    $('tmId').value = truck.id;
+    $('tmNopol').value = truck.nopol || '';
+    $('tmJenis').value = truck.jenis || 'Truk Fuso (CDD)';
+    $('tmKapasitas').value = truck.kapasitas || '';
+    $('tmTahun').value = truck.tahun || '';
+    $('tmStatus').value = truck.status || 'Milik Sendiri (Lunas)';
+    $('tmCicilan').value = truck.cicilan ? truck.cicilan.toLocaleString('id-ID') : '';
+  } else {
+    $('truckModalTitle').textContent = '➕ Tambah Unit Armada Baru';
+    $('tmId').value = '';
+    $('tmCicilan').value = '';
+  }
+  openModal('truckModal');
+}
+
+function editTruck(id) {
+  const t = currentTrucks.find(x => x.id === id);
+  if (t) openTruckModal(t);
+}
+
+function confirmDeleteTruck(id, nopol) {
+  if (!currentUser || currentUser.role !== 'owner') {
+    toast('⛔ Hanya Owner yang berwenang mengurangi armada.', 'error');
+    return;
+  }
+  pendingDeleteTruckId = id;
+  document.getElementById('delTruckNopolText').textContent = nopol;
+  openModal('delTruckModal');
+}
+
+async function doDeleteTruck() {
+  if (!pendingDeleteTruckId) return;
+  const btn = document.getElementById('delTruckConfirmBtn');
+  btn.disabled = true;
+  btn.textContent = 'Menghapus...';
   try {
-    await API.saveTruck({
-      nopol    : document.getElementById('tNopol').value.trim().toUpperCase(),
-      jenis    : document.getElementById('tJenis').value,
-      kapasitas: document.getElementById('tKapasitas').value.trim(),
-      tahun    : parseInt(document.getElementById('tTahun').value) || 2023,
-      status   : document.getElementById('tStatus').value,
-      cicilan  : rpRaw(document.getElementById('tCicilan').value),
-    });
-    toast('✅ Data kendaraan berhasil disimpan ke database!','success');
+    const res = await API.deleteTruck(pendingDeleteTruckId);
+    closeModal('delTruckModal');
+    toast('✅ ' + (res.message || 'Unit armada berhasil dihapus!'), 'success');
+    pendingDeleteTruckId = null;
+    await loadTrucks();
     await renderDash();
   } catch (err) {
-    toast('❌ Gagal menyimpan data kendaraan: ' + (err.message || 'Error'), 'error');
+    toast('❌ Gagal menghapus unit: ' + (err.message || 'Error'), 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🗑️ Hapus Unit';
+  }
+}
+
+async function submitTruckForm(e) {
+  e.preventDefault();
+  if (!currentUser || currentUser.role !== 'owner') {
+    toast('⛔ Hanya Owner yang berwenang mengelola armada.', 'error');
+    return;
+  }
+  const $ = id => document.getElementById(id);
+  const truckId = $('tmId').value;
+  const payload = {
+    nopol: $('tmNopol').value.trim().toUpperCase(),
+    jenis: $('tmJenis').value,
+    kapasitas: $('tmKapasitas').value.trim(),
+    tahun: parseInt($('tmTahun').value) || null,
+    status: $('tmStatus').value,
+    cicilan: rpRaw($('tmCicilan').value) || 0.0
+  };
+
+  if (!payload.nopol) {
+    toast('Nomor polisi wajib diisi.', 'error');
+    return;
+  }
+
+  const btn = $('tmSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Menyimpan...';
+
+  try {
+    if (truckId) {
+      await API.updateTruck(truckId, payload);
+      toast('✅ Unit armada berhasil diperbarui!', 'success');
+    } else {
+      await API.createTruck(payload);
+      toast('✅ Unit armada baru berhasil ditambahkan!', 'success');
+    }
+    closeModal('truckModal');
+    await loadTrucks();
+    await renderDash();
+  } catch (err) {
+    toast('❌ Gagal menyimpan armada: ' + (err.message || 'Error'), 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '💾 Simpan Unit';
   }
 }
 
@@ -2007,6 +2229,41 @@ async function handleChangePassword(e) {
     document.getElementById('pwdConfirm').value = '';
   } catch (err) {
     toast('❌ ' + (err.message || 'Gagal mengganti password.'), 'error');
+  }
+}
+
+async function handleAdminPasswordChange(e) {
+  e.preventDefault();
+  if (!currentUser || currentUser.role !== 'owner') {
+    toast('⛔ Fitur ini hanya untuk Owner.', 'error');
+    return;
+  }
+  const p1 = document.getElementById('adminPwdNew').value;
+  const p2 = document.getElementById('adminPwdConfirm').value;
+
+  if (p1 !== p2) {
+    toast('❌ Konfirmasi password baru admin tidak cocok.', 'error');
+    return;
+  }
+  if (p1.length < 8) {
+    toast('❌ Password baru admin minimal harus 8 karakter.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('btnSubmitAdminPwd');
+  btn.disabled = true;
+  btn.textContent = 'Menyimpan...';
+
+  try {
+    const res = await API.resetAdminPassword(p1);
+    toast('✅ ' + (res.message || 'Password Admin berhasil diperbarui!'), 'success');
+    document.getElementById('adminPwdNew').value = '';
+    document.getElementById('adminPwdConfirm').value = '';
+  } catch (err) {
+    toast('❌ Gagal mengubah password admin: ' + (err.message || 'Error'), 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔑 Simpan Password Admin Baru';
   }
 }
 
@@ -2046,7 +2303,7 @@ async function importData(e) {
       const res = await API.importBackup(d);
       toast('📥 ' + (res.message || 'Data berhasil dipulihkan!'), 'success');
       await renderDash();
-      await loadTruckForm();
+      await loadTrucks();
     } catch (err) {
       toast('❌ Gagal memulihkan: ' + (err.message || 'File tidak valid'), 'error');
     }
