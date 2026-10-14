@@ -1435,7 +1435,7 @@ function emptyRow(cols, msg) {
 // ============================================================
 const TITLES = { dashboard:'Dashboard', input:'Input Transaksi', riwayat:'Riwayat', mingguan:'Laporan Mingguan', bulanan:'Laporan Bulanan', pengaturan:'Pengaturan' };
 
-function nav(page) {
+async function nav(page) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.querySelectorAll('.bnav-item').forEach(b=>b.classList.remove('active'));
@@ -1453,8 +1453,8 @@ function nav(page) {
 
   if (page==='dashboard') await renderDash();
   if (page==='riwayat')   await renderRiwayat();
-  if (page==='mingguan')  initWeekPicker();
-  if (page==='bulanan')   initMonthPicker();
+  if (page==='mingguan')  await initWeekPicker();
+  if (page==='bulanan')   await initMonthPicker();
   if (page==='pengaturan') { await loadTruckForm(); }
 
   closeSidebar();
@@ -1723,13 +1723,13 @@ function weekRange(val) {
   const fmt = dt=>dt.toISOString().slice(0,10);
   return {start:fmt(mon), end:fmt(sun)};
 }
-function initWeekPicker() {
+async function initWeekPicker() {
   const p = document.getElementById('weekPicker');
   if (!p.value) {
     const n = new Date();
     p.value = `${n.getFullYear()}-W${String(getWeekNum(n)).padStart(2,'0')}`;
-    renderMingguan();
   }
+  await renderMingguan();
 }
 async function renderMingguan() {
   const val = document.getElementById('weekPicker').value;
@@ -1817,9 +1817,10 @@ async function renderMingguan() {
 // ============================================================
 // LAPORAN BULANAN
 // ============================================================
-function initMonthPicker() {
+async function initMonthPicker() {
   const p = document.getElementById('monthPicker');
-  if (!p.value) { p.value = today().slice(0,7); renderBulanan(); }
+  if (!p.value) { p.value = today().slice(0,7); }
+  await renderBulanan();
 }
 async function renderBulanan() {
   const val = document.getElementById('monthPicker').value;
