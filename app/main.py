@@ -94,6 +94,15 @@ app.add_middleware(
 # Helper Indonesian Month Names
 MN_INDO = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember']
 
+# Health Check & Keep-Alive Endpoint
+@app.get("/api/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "service": "PT KYNAN RAHARJA PRATAMA Cash Flow API",
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
 # ============================================================
 # AUTHENTICATION ENDPOINTS
 # ============================================================
