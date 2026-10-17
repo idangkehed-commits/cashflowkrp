@@ -94,14 +94,12 @@ async def add_security_headers(request: Request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     return response
 
-# CORS Middleware (Restricted)
+# CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"] if settings.DEBUG else [
-        "https://cashflowkrp.onrender.com"
-    ],
+    allow_origin_regex=r".*",
     allow_credentials=True,
-    allow_methods=["GET", "POST", "DELETE", "PUT", "OPTIONS", "HEAD"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
