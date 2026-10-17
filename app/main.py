@@ -25,10 +25,12 @@ from .security import (
 Base.metadata.create_all(bind=engine)
 
 def seed_initial_data():
-    """Seed initial Owner, Admin, and Truck settings if not already in DB."""
+    """Seed initial Owner, Admin, and Truck settings if not already in DB, and ensure credentials are up-to-date."""
     db = next(get_db())
     try:
-        if db.query(User).count() == 0:
+        # Sinkronisasi / Seed Akun Owner
+        owner = db.query(User).filter(User.username == settings.DEFAULT_OWNER_USERNAME).first()
+        if not owner:
             owner = User(
                 username=settings.DEFAULT_OWNER_USERNAME,
                 hashed_password=get_password_hash(settings.DEFAULT_OWNER_PASSWORD),
@@ -36,6 +38,14 @@ def seed_initial_data():
                 role="owner",
                 is_active=True
             )
+            db.add(owner)
+        else:
+            owner.hashed_password = get_password_hash(settings.DEFAULT_OWNER_PASSWORD)
+            owner.is_active = True
+
+        # Sinkronisasi / Seed Akun Admin
+        admin = db.query(User).filter(User.username == settings.DEFAULT_ADMIN_USERNAME).first()
+        if not admin:
             admin = User(
                 username=settings.DEFAULT_ADMIN_USERNAME,
                 hashed_password=get_password_hash(settings.DEFAULT_ADMIN_PASSWORD),
@@ -43,8 +53,12 @@ def seed_initial_data():
                 role="admin",
                 is_active=True
             )
-            db.add_all([owner, admin])
-            db.commit()
+            db.add(admin)
+        else:
+            admin.hashed_password = get_password_hash(settings.DEFAULT_ADMIN_PASSWORD)
+            admin.is_active = True
+
+        db.commit()
 
         if db.query(TruckSetting).count() == 0:
             truck = TruckSetting(

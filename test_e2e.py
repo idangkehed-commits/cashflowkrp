@@ -17,12 +17,12 @@ def test_full_flow():
     r_login_bad = client.post("/api/auth/login", json={"username": "admin", "password": "WrongPassword!"})
     assert r_login_bad.status_code == 401, f"Expected 401 got {r_login_bad.status_code}"
 
-    r_login_admin = client.post("/api/auth/login", json={"username": "admin", "password": "AdminKRP2026!"})
+    r_login_admin = client.post("/api/auth/login", json={"username": "admin", "password": "Bandung2026!"})
     assert r_login_admin.status_code == 200
     admin_token = r_login_admin.json()["access_token"]
     admin_headers = {"Authorization": f"Bearer {admin_token}"}
 
-    r_login_owner = client.post("/api/auth/login", json={"username": "owner", "password": "OwnerKRP2026!"})
+    r_login_owner = client.post("/api/auth/login", json={"username": "owner", "password": "Bandung2026!"})
     assert r_login_owner.status_code == 200
     owner_token = r_login_owner.json()["access_token"]
     owner_headers = {"Authorization": f"Bearer {owner_token}"}
@@ -101,7 +101,7 @@ def test_full_flow():
     print("[OK] Admin verified login with newly set password")
 
     # Restore admin password for default compatibility
-    client.post("/api/owner/admin-password", headers=owner_headers, json={"new_password": "AdminKRP2026!"})
+    client.post("/api/owner/admin-password", headers=owner_headers, json={"new_password": "Bandung2026!"})
 
     # 9. Test Fleet Management (Kelola Unit Armada - Tambah & Kurangi Unit)
     r_trucks = client.get("/api/trucks", headers=admin_headers)

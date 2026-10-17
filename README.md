@@ -33,8 +33,8 @@ Saat pertama kali dijalankan, sistem otomatis melakukan seeding 2 akun:
 
 | Peran | Username | Password Default | Hak Akses |
 |---|---|---|---|
-| **Owner** | `owner` | `OwnerKRP2026!` | Kontrol Penuh, Laporan, Backup, Pengaturan Truk, Hapus Data |
-| **Admin** | `admin` | `AdminKRP2026!` | Input Transaksi Harian, Riwayat Transaksi |
+| **Owner** | `owner` | `Bandung2026!` | Kontrol Penuh, Laporan, Backup, Pengaturan Truk, Hapus Data |
+| **Admin** | `admin` | `Bandung2026!` | Input Transaksi Harian, Riwayat Transaksi |
 
 > [!IMPORTANT]
 > Sangat disarankan untuk segera memperbarui password setelah login pertama kali melalui menu **Pengaturan > Ganti Password Akun**.

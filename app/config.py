@@ -1,4 +1,9 @@
 import os
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    pass
 
 class Settings:
     # Security: Secret Key for JWT Signing
@@ -21,13 +26,13 @@ class Settings:
             url = url.replace("postgres://", "postgresql://", 1)
         return url
 
-    # Default Credentials (hanya di-seed jika database masih kosong)
+    # Default Credentials
     DEFAULT_OWNER_USERNAME: str = os.getenv("DEFAULT_OWNER_USER", "owner")
-    DEFAULT_OWNER_PASSWORD: str = os.getenv("DEFAULT_OWNER_PASS", "OwnerKRP2026!")
+    DEFAULT_OWNER_PASSWORD: str = os.getenv("DEFAULT_OWNER_PASS", "Bandung2026!")
     DEFAULT_OWNER_NAME: str = "Owner PT KYNAN RAHARJA PRATAMA"
 
     DEFAULT_ADMIN_USERNAME: str = os.getenv("DEFAULT_ADMIN_USER", "admin")
-    DEFAULT_ADMIN_PASSWORD: str = os.getenv("DEFAULT_ADMIN_PASS", "AdminKRP2026!")
+    DEFAULT_ADMIN_PASSWORD: str = os.getenv("DEFAULT_ADMIN_PASS", "Bandung2026!")
     DEFAULT_ADMIN_NAME: str = "Admin Operasional KRP"
 
     # Rate limiting untuk mencegah Brute-Force Login (5 percobaan dalam 5 menit, lockout 15 menit)
