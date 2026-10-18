@@ -4,12 +4,22 @@ from pydantic import BaseModel, Field, field_validator
 import html
 
 class UserLogin(BaseModel):
-    username: str = Field(..., min_length=3, max_length=50)
-    password: str = Field(..., min_length=6, max_length=100)
+    email: str = Field(..., min_length=3, max_length=254)
+    password: str = Field(..., min_length=1, max_length=72)
+
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, value):
+        import re
+        value = value.strip().lower()
+        if not re.fullmatch(r'[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+', value):
+            raise ValueError('Alamat email tidak valid.')
+        return value
 
 class UserResponse(BaseModel):
     id: int
     username: str
+    email: Optional[str] = None
     full_name: str
     role: str
 
@@ -18,11 +28,16 @@ class UserResponse(BaseModel):
 
 class UserChangePassword(BaseModel):
     old_password: str
-    new_password: str = Field(..., min_length=6, max_length=100)
+    new_password: str = Field(..., min_length=12, max_length=72)
+
+    @field_validator('new_password')
+    @classmethod
+    def password_bytes(cls, value):
+        if len(value.encode('utf-8')) > 72:
+            raise ValueError('Password maksimal 72 byte UTF-8.')
+        return value
 
 class Token(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
     user: UserResponse
 
 class TransactionCreate(BaseModel):
@@ -55,8 +70,8 @@ class TransactionResponse(BaseModel):
     class Config:
         from_attributes = True
 
-class AdminPasswordReset(BaseModel):
-    new_password: str = Field(..., min_length=6, max_length=100)
+class AdminPasswordReset(UserChangePassword):
+    old_password: str = ''
 
 class TruckSettingSchema(BaseModel):
     nopol: Optional[str] = Field(default="", max_length=30)

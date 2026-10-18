@@ -5,6 +5,7 @@ from fastapi import FastAPI, Depends, HTTPException, status, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
+from fastapi.exceptions import RequestValidationError
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -17,64 +18,13 @@ from .schemas import (
     AdminPasswordReset, TruckSettingCreate, TruckSettingResponse
 )
 from .security import (
-    get_password_hash, verify_password, create_access_token,
-    get_current_user, require_owner, login_limiter, log_audit
+    get_password_hash, verify_password, DUMMY_HASH, get_current_user, require_owner,
+    set_session, clear_session, revoke_user_sessions, require_same_origin,
+    check_login_limits, record_login_failure, reset_account_attempts, log_audit,
 )
+from .auth_migration import initialize_auth
 
-# Initialize Database Tables
-Base.metadata.create_all(bind=engine)
-
-def seed_initial_data():
-    """Seed initial Owner, Admin, and Truck settings if not already in DB, and ensure credentials are up-to-date."""
-    db = next(get_db())
-    try:
-        # Sinkronisasi / Seed Akun Owner
-        owner = db.query(User).filter(User.username == settings.DEFAULT_OWNER_USERNAME).first()
-        if not owner:
-            owner = User(
-                username=settings.DEFAULT_OWNER_USERNAME,
-                hashed_password=get_password_hash(settings.DEFAULT_OWNER_PASSWORD),
-                full_name=settings.DEFAULT_OWNER_NAME,
-                role="owner",
-                is_active=True
-            )
-            db.add(owner)
-        else:
-            owner.hashed_password = get_password_hash(settings.DEFAULT_OWNER_PASSWORD)
-            owner.is_active = True
-
-        # Sinkronisasi / Seed Akun Admin
-        admin = db.query(User).filter(User.username == settings.DEFAULT_ADMIN_USERNAME).first()
-        if not admin:
-            admin = User(
-                username=settings.DEFAULT_ADMIN_USERNAME,
-                hashed_password=get_password_hash(settings.DEFAULT_ADMIN_PASSWORD),
-                full_name=settings.DEFAULT_ADMIN_NAME,
-                role="admin",
-                is_active=True
-            )
-            db.add(admin)
-        else:
-            admin.hashed_password = get_password_hash(settings.DEFAULT_ADMIN_PASSWORD)
-            admin.is_active = True
-
-        db.commit()
-
-        if db.query(TruckSetting).count() == 0:
-            truck = TruckSetting(
-                nopol="B 9876 KRP",
-                jenis="Truk Fuso (CDD)",
-                kapasitas="8 Ton",
-                tahun=2023,
-                status="Milik Sendiri (Lunas)",
-                cicilan=0.0
-            )
-            db.add(truck)
-            db.commit()
-    finally:
-        db.close()
-
-seed_initial_data()
+initialize_auth()
 
 # FastAPI App with production docs toggle for security
 app = FastAPI(
@@ -84,23 +34,38 @@ app = FastAPI(
     redoc_url="/api/redoc" if settings.DEBUG else None
 )
 
+@app.exception_handler(RequestValidationError)
+async def validation_error(request, exc):
+    # Do not echo passwords or submitted financial data in validation responses.
+    return JSONResponse({'detail': 'Data belum valid. Periksa kembali isian Anda.'}, status_code=422,
+                        headers={'Cache-Control': 'no-store'})
+
 # Security Middleware: Security Headers
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
+    if request.url.path.startswith('/api/') and request.method not in ('GET', 'HEAD', 'OPTIONS'):
+        try:
+            require_same_origin(request)
+        except HTTPException as exc:
+            return JSONResponse({'detail': exc.detail}, status_code=exc.status_code, headers={'Cache-Control':'no-store'})
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "SAMEORIGIN"
     response.headers["X-XSS-Protection"] = "1; mode=block"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    if request.url.path.startswith('/api/'):
+        response.headers['Cache-Control'] = 'no-store'
+        response.headers['Pragma'] = 'no-cache'
+    response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
     return response
 
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r".*",
+    allow_origins=[settings.PUBLIC_ORIGIN],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 # Helper Indonesian Month Names
@@ -118,51 +83,29 @@ async def health_check():
 # ============================================================
 # AUTHENTICATION ENDPOINTS
 # ============================================================
-@app.post("/api/auth/login", response_model=Token)
-async def login(credentials: UserLogin, request: Request, db: Session = Depends(get_db)):
-    client_ip = request.client.host if request.client else "unknown"
-    forwarded = request.headers.get("x-forwarded-for")
-    if forwarded:
-        client_ip = forwarded.split(",")[0].strip()
+@app.post('/api/auth/login', response_model=Token)
+def login(credentials: UserLogin, request: Request, response: Response, db: Session = Depends(get_db)):
+    email = credentials.email
+    client_ip = request.client.host if request.client else 'unknown'
+    check_login_limits(db, email, client_ip)
+    user = db.query(User).filter(User.email == email).first()
+    valid = verify_password(credentials.password, user.hashed_password if user else DUMMY_HASH)
+    if not valid or user is None or not user.is_active:
+        record_login_failure(db, email, client_ip)
+        log_audit(db, request, 'LOGIN_FAILED', 'Email/password tidak sesuai atau akun tidak aktif.')
+        raise HTTPException(401, 'Email atau password tidak sesuai.')
+    reset_account_attempts(db, email)
+    clear_session(request, response, db)
+    set_session(db, user, response)
+    log_audit(db, request, 'LOGIN_SUCCESS', f'Role: {user.role}', user)
+    return {'user': user}
 
-    # 1. Rate Limiting Check (Brute-Force Protection)
-    is_blocked, remaining_seconds = login_limiter.is_blocked(client_ip)
-    if is_blocked:
-        remaining_minutes = max(1, remaining_seconds // 60)
-        raise HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail=f"Terlalu banyak percobaan login gagal. Akun diblokir sementara demi keamanan selama {remaining_minutes} menit."
-        )
 
-    # 2. Query User
-    user = db.query(User).filter(User.username == credentials.username.strip()).first()
-    if not user or not verify_password(credentials.password, user.hashed_password):
-        login_limiter.record_failure(client_ip)
-        log_audit(db, request, "LOGIN_FAILED", f"Username: {credentials.username}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Username atau password salah."
-        )
+@app.post('/api/auth/logout')
+def logout(request: Request, response: Response, db: Session = Depends(get_db)):
+    clear_session(request, response, db)
+    return {'message': 'Anda telah keluar.'}
 
-    if not user.is_active:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Akun ini telah dinonaktifkan."
-        )
-
-    # 3. Success: Reset rate limit & Issue JWT
-    login_limiter.record_success(client_ip)
-    log_audit(db, request, "LOGIN_SUCCESS", f"Role: {user.role}", user)
-
-    access_token = create_access_token(
-        data={"sub": user.username, "role": user.role, "uid": user.id}
-    )
-
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": user
-    }
 
 @app.get("/api/auth/me", response_model=UserResponse)
 async def get_me(current_user: User = Depends(get_current_user)):
@@ -172,14 +115,20 @@ async def get_me(current_user: User = Depends(get_current_user)):
 async def change_password(
     data: UserChangePassword,
     request: Request,
+    response: Response,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     if not verify_password(data.old_password, current_user.hashed_password):
         raise HTTPException(status_code=400, detail="Password lama Anda salah.")
     
+    if verify_password(data.new_password, current_user.hashed_password):
+        raise HTTPException(400, 'Pilih password baru yang berbeda.')
     current_user.hashed_password = get_password_hash(data.new_password)
+    revoke_user_sessions(db, current_user.id)
     db.commit()
+    clear_session(request, response, db)
+    set_session(db, current_user, response)
     log_audit(db, request, "CHANGE_PASSWORD", "Password berhasil diubah", current_user)
     return {"message": "Password berhasil diperbarui."}
 
@@ -195,6 +144,7 @@ async def reset_admin_password(
         raise HTTPException(status_code=404, detail="Akun admin tidak ditemukan.")
     
     admin_user.hashed_password = get_password_hash(data.new_password)
+    revoke_user_sessions(db, admin_user.id)
     db.commit()
     log_audit(db, request, "RESET_ADMIN_PASSWORD", f"Password admin '{admin_user.username}' diubah oleh Owner", current_user)
     return {"message": f"Password untuk akun admin '{admin_user.username}' berhasil diperbarui."}

@@ -1,42 +1,28 @@
 import os
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except Exception:
-    pass
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 class Settings:
-    # Security: Secret Key for JWT Signing
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "krp-super-secure-production-secret-key-change-in-env-2026")
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "480"))  # 8 jam
-    
-    # Environment
-    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
-    DEBUG: bool = ENVIRONMENT != "production"
+    ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
+    DEBUG = ENVIRONMENT != 'production'
+    RAW_DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///./cashflow.db')
+    PUBLIC_ORIGIN = os.getenv('PUBLIC_ORIGIN', os.getenv('RENDER_EXTERNAL_URL', 'https://cashflowkrp.onrender.com')).rstrip('/')
+    SESSION_MINUTES = int(os.getenv('SESSION_MINUTES', '480'))
+    COOKIE_NAME = '__Host-krp_session' if not DEBUG else 'krp_session'
+    DEFAULT_OWNER_USERNAME = os.getenv('DEFAULT_OWNER_USER', 'owner')
+    DEFAULT_ADMIN_USERNAME = os.getenv('DEFAULT_ADMIN_USER', 'admin')
+    DEFAULT_OWNER_NAME = 'Owner PT KYNAN RAHARJA PRATAMA'
+    DEFAULT_ADMIN_NAME = 'Admin Operasional KRP'
+    OWNER_EMAIL = os.getenv('OWNER_EMAIL', '').strip().lower()
+    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', '').strip().lower()
+    OWNER_INITIAL_PASSWORD = os.getenv('OWNER_INITIAL_PASSWORD', '')
+    ADMIN_INITIAL_PASSWORD = os.getenv('ADMIN_INITIAL_PASSWORD', '')
 
-    # Database: Render PostgreSQL or Local SQLite
-    RAW_DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./cashflow.db")
-    
     @property
-    def DATABASE_URL(self) -> str:
-        url = self.RAW_DATABASE_URL
-        # Render uses postgres:// which SQLAlchemy 1.4+ / 2.0 requires postgresql://
-        if url.startswith("postgres://"):
-            url = url.replace("postgres://", "postgresql://", 1)
-        return url
+    def DATABASE_URL(self):
+        return self.RAW_DATABASE_URL.replace('postgres://', 'postgresql://', 1)
 
-    # Default Credentials
-    DEFAULT_OWNER_USERNAME: str = os.getenv("DEFAULT_OWNER_USER", "owner")
-    DEFAULT_OWNER_PASSWORD: str = os.getenv("DEFAULT_OWNER_PASS", "Bandung2026!")
-    DEFAULT_OWNER_NAME: str = "Owner PT KYNAN RAHARJA PRATAMA"
-
-    DEFAULT_ADMIN_USERNAME: str = os.getenv("DEFAULT_ADMIN_USER", "admin")
-    DEFAULT_ADMIN_PASSWORD: str = os.getenv("DEFAULT_ADMIN_PASS", "Bandung2026!")
-    DEFAULT_ADMIN_NAME: str = "Admin Operasional KRP"
-
-    # Rate limiting untuk mencegah Brute-Force Login (5 percobaan dalam 5 menit, lockout 15 menit)
-    LOGIN_MAX_ATTEMPTS: int = 5
-    LOGIN_LOCKOUT_MINUTES: int = 15
 
 settings = Settings()
