@@ -9,11 +9,25 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), unique=True, index=True, nullable=False)
+    email = Column(String(254), nullable=True)
     hashed_password = Column(String(255), nullable=False)
     full_name = Column(String(100), nullable=False)
     role = Column(String(20), nullable=False, default="admin")  # "owner" atau "admin"
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class AuthSession(Base):
+    __tablename__ = 'auth_sessions'
+    token_hash = Column(String(64), primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    expires_at = Column(DateTime, nullable=False, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+class LoginAttempt(Base):
+    __tablename__ = 'auth_login_attempts'
+    key = Column(String(64), primary_key=True)
+    failures = Column(Integer, nullable=False, default=0)
+    window_start = Column(DateTime, nullable=False, default=datetime.utcnow)
 
 class Transaction(Base):
     __tablename__ = "transactions"
