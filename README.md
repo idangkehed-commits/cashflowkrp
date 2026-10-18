@@ -9,13 +9,13 @@ Dibangun dengan arsitektur modern **Python 3.10 + FastAPI + SQLAlchemy ORM + Pos
 ## 🛡️ Fitur Keamanan Enterprise-Grade
 
 1. **Anti Brute-Force Rate Limiting**:
-   - Pembatasan otomatis: maksimal 5 kali percobaan login gagal per alamat IP.
+   - Pembatasan otomatis: 10 percobaan gagal per akun atau 30 per alamat IP dalam 15 menit, disimpan di database.
    - Lockout otomatis selama 15 menit jika terindikasi serangan brute-force.
 2. **Kriptografi & Password Hashing**:
    - Hashing native `bcrypt` (12 rounds) dengan salt unik untuk setiap password.
-   - Proteksi DoS 72-byte truncation safety.
+   - Password melebihi 72 byte UTF-8 ditolak, bukan dipotong.
 3. **Autentikasi & Autorisasi Berbasis Peran (RBAC)**:
-   - Token JWT (HS256) dengan masa kedaluwarsa otomatis (8 jam).
+   - Sesi acak server dengan masa kedaluwarsa 8 jam dan cookie HttpOnly/Secure/SameSite.
    - **Peran Owner**: Kontrol penuh (input, lihat riwayat, cetak laporan mingguan/bulanan, backup JSON, pemulihan database, reset database, modifikasi data armada).
    - **Peran Admin**: Terisolasi hanya untuk input transaksi harian dan melihat riwayat/dashboard. Tombol hapus dan kelola database dinonaktifkan.
 4. **Proteksi Injeksi & Serangan Web**:
@@ -27,17 +27,11 @@ Dibangun dengan arsitektur modern **Python 3.10 + FastAPI + SQLAlchemy ORM + Pos
 
 ---
 
-## 👥 Akun Akses Default
+## Login email dan password
 
-Saat pertama kali dijalankan, sistem otomatis melakukan seeding 2 akun:
+Login hanya memakai akun Owner/Admin yang sudah didaftarkan. Tidak ada pendaftaran publik, password bawaan, atau login username. Aktivasi akun dan konfigurasi aman dijelaskan pada [AUTH_SETUP.md](AUTH_SETUP.md).
 
-| Peran | Username | Password Default | Hak Akses |
-|---|---|---|---|
-| **Owner** | `owner` | `Bandung2026!` | Kontrol Penuh, Laporan, Backup, Pengaturan Truk, Hapus Data |
-| **Admin** | `admin` | `Bandung2026!` | Input Transaksi Harian, Riwayat Transaksi |
-
-> [!IMPORTANT]
-> Sangat disarankan untuk segera memperbarui password setelah login pertama kali melalui menu **Pengaturan > Ganti Password Akun**.
+Sesi dikelola server melalui cookie HttpOnly, Secure di produksi, dan SameSite. Logout serta perubahan password mencabut sesi di server. Password disimpan sebagai hash bcrypt dan tidak ditimpa ketika server restart.
 
 ---
 
