@@ -692,6 +692,170 @@ tbody tr:active { background: var(--bg); }
   .bnav-label { font-size: 8.5px; }
   .bnav-icon  { font-size: 20px; }
 }
+/* KRP workspace refresh — self-contained, no external fonts or scripts. */
+:root { --primary:#285b9b; --primary-dark:#183c68; --primary-light:#467db9; --success:#237e65; --danger:#bb5356; --secondary:#728ba7; --bg:#f5f7fa; --border:#e5eaf0; --text:#23364c; --text-muted:#6c7b8d; --sidebar-w:240px; }
+body { font-size:14px; line-height:1.5; }
+.ui-icon { width:19px; height:19px; display:inline-block; vertical-align:middle; flex-shrink:0; }
+.sidebar { background:white; color:var(--text); border-right:1px solid var(--border); }
+.sidebar-header { padding:30px 24px 26px; border-bottom:1px solid var(--border); }
+.brand-mark { font-size:30px; letter-spacing:-1.5px; font-weight:850; color:var(--primary-dark); margin-bottom:12px; }
+.brand-mark span { font-size:18px; font-weight:500; letter-spacing:-.5px; padding-left:7px; color:var(--primary); }
+.sidebar-logo { font-size:9px; letter-spacing:1.7px; color:var(--text-muted); margin:0 0 12px; }
+.sidebar-company { color:var(--text-muted); font-size:11px; font-weight:500; }
+.sidebar-nav { padding:26px 16px; }
+.nav-group-label { font-size:9px; letter-spacing:1.6px; color:var(--text-muted); padding:0 12px 14px; }
+.nav-item { font-family:inherit; background:none; border:0; border-radius:9px; width:100%; text-align:left; color:var(--text-muted); padding:13px 12px; margin-bottom:5px; gap:12px; font-size:13px; min-height:46px; }
+.nav-item:hover { color:var(--primary); background:#f5f8fc; }
+.nav-item.active { color:var(--primary-dark); background:#eaf1f9; border-left:0; font-weight:650; }
+.nav-icon { display:flex; align-items:center; justify-content:center; }
+.sidebar-note { margin:12px 20px 20px; background:#eff4fa; border-radius:12px; padding:18px; }
+.sidebar-note strong { font-size:17px; line-height:1.5; color:var(--primary-dark); }
+.sidebar-note p { font-size:11px; color:var(--text-muted); margin-top:10px; }
+.sidebar-footer { color:var(--text-muted); border-top:1px solid var(--border); font-size:9px; padding:20px 12px; }
+.main { min-width:0; width:calc(100% - var(--sidebar-w)); }
+.topbar { height:70px; padding:0 32px; box-shadow:none; background:rgba(255,255,255,.96); }
+.topbar-left { flex:0 1 auto; }
+.topbar-page-label { color:var(--text-muted); font-size:12px; background:transparent; padding:0; font-weight:500; }
+.topbar-page-label::before { content:'Ruang kerja / '; color:#96a2b0; margin-right:8px; }
+.topbar-center { display:none; }
+.topbar-right { flex:1; }
+#userBadge { flex-wrap:nowrap; }
+#userRoleBadge { white-space:nowrap; }
+.topbar #userBadge .btn { min-height:36px!important; padding:6px 12px!important; }
+.content { width:100%; max-width:1520px; margin:0 auto; padding:32px 34px 40px; }
+.page-heading { display:flex; align-items:center; justify-content:space-between; gap:24px; margin:0 0 30px; }
+.eyebrow { font-size:9px; font-weight:650; letter-spacing:1.8px; color:var(--text-muted); margin-bottom:8px; }
+h2 { font-size:28px; font-weight:700; letter-spacing:-.8px; line-height:1.25; color:var(--primary-dark); }
+.page-heading p { color:var(--text-muted); font-size:13px; margin-top:8px; }
+.section-caption { display:flex; justify-content:space-between; color:var(--text-muted); font-size:12px; margin-bottom:12px; gap:12px; }
+.summary-grid { gap:16px; margin-bottom:24px; grid-template-columns:repeat(4,minmax(0,1fr)); }
+.s-card { padding:22px 18px; box-shadow:none; border-radius:12px; min-width:0; }
+.s-card::before { display:none; }
+.s-label { font-size:11px; font-weight:500; text-transform:none; letter-spacing:0; }
+.s-value { font-size:clamp(17px,1.7vw,26px); font-weight:700; letter-spacing:-.7px; margin:14px 0 10px; overflow-wrap:anywhere; }
+.s-sub { font-size:11px; line-height:1.5; }
+.s-icon { opacity:1; float:none; display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; color:var(--c); background:color-mix(in srgb,var(--c) 8%,white); margin:0 0 14px; }
+#page-dashboard .s-card:first-child { background:var(--primary-dark); border-color:var(--primary-dark); }
+#page-dashboard .s-card:first-child .s-label,#page-dashboard .s-card:first-child .s-sub { color:#c5d5e9; }
+#page-dashboard .s-card:first-child .s-value { color:white!important; }
+#page-dashboard .s-card:first-child .s-icon { color:#dbe9fa; background:#ffffff16; }
+.g2 { grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+#page-dashboard > .g2 { grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); }
+.card { padding:24px; border-radius:12px; box-shadow:none; min-width:0; }
+.card-title { font-size:15px; font-weight:650; letter-spacing:-.2px; margin-bottom:20px; }
+.net-result { padding:12px 0 24px; }
+.net-result > span { font-size:12px; color:var(--text-muted); }
+.net-result strong { display:block; font-size:30px; font-weight:700; letter-spacing:-1px; margin:12px 0; overflow-wrap:anywhere; }
+.net-result p { color:var(--text-muted); font-size:12px; line-height:1.7; }
+.btn { min-height:44px; border-radius:8px; padding:10px 16px; font-size:13px; font-weight:600; gap:8px; font-family:inherit; box-shadow:none; }
+.btn-primary { background:var(--primary-dark); }
+.btn-primary:hover { background:var(--primary); }
+.btn-secondary { background:#f2f5f9; color:var(--text); }
+.btn-outline { border-color:var(--border); color:var(--primary-dark); background:white; }
+.btn-sm { min-height:36px; }
+button:focus-visible,summary:focus-visible { outline:3px solid #7ea6d5; outline-offset:3px; }
+.btn-full { width:100%; }
+#page-input .card { max-width:980px; }
+#page-input .f-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px 24px; }
+.fg { min-width:0; }
+.fg label { font-size:12px; font-weight:550; }
+.fg input,.fg select,.fg textarea { border:1px solid #dce3ec; border-radius:8px; min-height:46px; width:100%; max-width:100%; }
+.fg textarea { min-height:110px; }
+.form-actions { display:flex; justify-content:flex-end; flex-direction:row-reverse; gap:12px; margin-top:24px; padding-top:20px; border-top:1px solid var(--border); }
+.form-actions .btn { width:auto; }
+.type-toggle { max-width:440px; border-color:var(--border); background:#f5f7fa; padding:4px; gap:4px; border-radius:9px; }
+.type-btn { border-radius:6px; padding:10px; font-size:13px; }
+.type-btn.masuk.active { background:#e1f0e9; color:#216d56; }
+.type-btn.keluar.active { background:#fae9e8; color:#a34348; }
+.report-toolbar { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:24px; }
+.report-toolbar h2 { font-size:24px; }
+.report-actions { display:flex; align-items:flex-end; gap:12px; }
+.report-actions input { width:200px; min-height:44px; }
+.report-actions .btn { white-space:nowrap; }
+.system-info { border-top:1px solid var(--border); margin-top:14px; padding-top:12px; font-size:12px; }
+.system-info summary { cursor:pointer; color:var(--primary); padding:5px 0; margin-bottom:6px; }
+.bottom-right-time { display:none; }
+@media (max-height:800px) { .sidebar-note { display:none; } }
+table { font-size:13px; }
+thead th { background:#f8fafc; font-size:10px; font-weight:600; padding:12px; }
+tbody td { padding:15px 12px; }
+tbody tr:hover { background:#f8fafc; }
+.tr { font-variant-numeric:tabular-nums; }
+.tbl-wrap { border:1px solid var(--border); border-radius:9px; }
+.sum-bar { border-radius:8px; padding:14px; background:#f3f7fc; }
+.badge { font-size:10px; font-weight:600; }
+@media (min-width:861px) and (max-width:1100px) {
+ :root { --sidebar-w:210px; }
+ .content { padding:26px 24px; }
+ .summary-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .sidebar-header { padding:26px 20px; }
+}
+@media (max-width:860px) {
+ .sidebar { width:260px; transform:translateX(-100%); }
+ .sidebar.open { transform:translateX(0); }
+ .main { margin-left:0; width:100%; }
+ .sidebar-note { display:none; }
+ .topbar { padding:0 14px; height:62px; gap:8px; }
+ .topbar-center { display:flex; flex:1; justify-content:flex-start; }
+ .topbar-main-title { font-size:15px; max-width:none; letter-spacing:-.3px; }
+ .topbar-left { flex:0 0 40px; }
+ .topbar-right { flex:0; }
+ #userRoleBadge { font-size:10px!important; max-width:110px; overflow:hidden; text-overflow:ellipsis; }
+ .topbar #userBadge .btn { padding:6px 8px!important; }
+ .content { padding:24px 16px calc(var(--bottom-nav-h) + var(--safe-bottom) + 24px); }
+ .page-heading { align-items:flex-start; flex-wrap:wrap; gap:18px; margin-bottom:24px; }
+ h2 { font-size:26px; }
+ .page-heading p { font-size:12px; }
+ .page-heading > .btn { width:auto; }
+ .summary-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-bottom:18px; }
+ .s-card { padding:16px 14px; }
+ .s-value { font-size:20px; margin-top:12px; letter-spacing:-.5px; }
+ .s-label { font-size:11px; }
+ .s-sub { font-size:10px; }
+ .g2,#page-dashboard > .g2 { grid-template-columns:minmax(0,1fr); gap:16px; }
+ .card { padding:18px; }
+ #page-input .f-grid { gap:18px; }
+ .report-toolbar { align-items:flex-start; flex-direction:column; gap:18px; }
+ .report-actions { width:100%; }
+ .report-actions .fg { flex:1; }
+ .report-actions input { width:100%; }
+ .report-actions .btn { padding:10px 12px; }
+ .bottom-nav { box-shadow:0 -2px 12px #183c6808; }
+ .bnav-item { color:var(--text-muted); }
+ .bnav-item.active { color:var(--primary); background:#f0f5fb; }
+ .bnav-icon { display:flex; }
+ .bnav-label { font-size:9px; }
+ .bottom-right-time { display:none; }
+ .fbar .btn { width:auto; }
+}
+@media (max-width:540px) {
+ #page-input .f-grid { grid-template-columns:minmax(0,1fr); }
+ .form-actions { flex-direction:column; }
+ .form-actions .btn { width:100%; }
+ .net-result strong { font-size:27px; }
+ .report-toolbar h2 { font-size:23px; }
+}
+@media (max-width:360px) {
+ .content { padding-left:12px; padding-right:12px; }
+ .topbar-main-title { font-size:13px; }
+ #userRoleBadge { max-width:85px; }
+ .topbar #userBadge .btn { padding:5px!important; }
+ .s-value { font-size:17px; }
+}
+@media print {
+ .page-heading,.section-caption,.report-toolbar,.sidebar-note { display:none!important; }
+ .main { width:100%; margin:0; }
+ .content { max-width:none; padding:0; }
+ .s-card { padding:10px; border-radius:0; background:white!important; }
+ .s-value { color:#111!important; font-size:16px; }
+ .summary-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+ .tbl-wrap { overflow:visible; border:0; }
+ #rTableWrap { display:block!important; }
+ #rCardList { display:none!important; }
+ .card { padding:12px; border-radius:0; }
+ .ui-icon { width:15px; height:15px; }
+}
+
 </style>
 </head>
 <body>
@@ -702,18 +866,18 @@ tbody tr:active { background: var(--bg); }
 <div class="sidebar-backdrop" id="backdrop" onclick="closeSidebar()"></div>
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <div class="sidebar-logo">🚛 Cash Flow Manager</div>
+    <div class="brand-mark">KRP<span>Cashflow</span></div><div class="sidebar-logo">RUANG KERJA KEUANGAN</div>
     <div class="sidebar-company">PT KYNAN RAHARJA<br>PRATAMA</div>
   </div>
-  <div class="sidebar-nav">
-    <div class="nav-item active"    onclick="nav('dashboard')"> <span class="nav-icon">📊</span> Dashboard</div>
-    <div class="nav-item"           onclick="nav('input')">     <span class="nav-icon">➕</span> Input Transaksi</div>
-    <div class="nav-item"           onclick="nav('riwayat')">   <span class="nav-icon">📋</span> Riwayat Transaksi</div>
-    <div class="nav-item"           onclick="nav('mingguan')">  <span class="nav-icon">📅</span> Laporan Mingguan</div>
-    <div class="nav-item"           onclick="nav('bulanan')">   <span class="nav-icon">📆</span> Laporan Bulanan</div>
-    <div class="nav-item"           onclick="nav('pengaturan')"><span class="nav-icon">⚙️</span> Pengaturan</div>
+  <div class="sidebar-nav"><div class="nav-group-label">OPERASIONAL</div>
+    <button type="button" class="nav-item active" onclick="nav('dashboard')"> <span class="nav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span> Dashboard</button>
+    <button type="button" class="nav-item" onclick="nav('input')">     <span class="nav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span> Input Transaksi</button>
+    <button type="button" class="nav-item" onclick="nav('riwayat')">   <span class="nav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v4H9zM9 12h6M9 16h6"/></svg></span> Riwayat Transaksi</button>
+    <button type="button" class="nav-item" onclick="nav('mingguan')">  <span class="nav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 11h18M8 15h3"/></svg></span> Laporan Mingguan</button>
+    <button type="button" class="nav-item" onclick="nav('bulanan')">   <span class="nav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 11h18M8 15h8M8 18h4"/></svg></span> Laporan Bulanan</button>
+    <button type="button" class="nav-item" onclick="nav('pengaturan')"><span class="nav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 3-1 3-3 1-2 5 2 5 3 1 1 3h6l1-3 3-1 2-5-2-5-3-1-1-3z"/><circle cx="12" cy="12" r="3"/></svg></span> Pengaturan</button>
   </div>
-  <div class="sidebar-footer">PT KYNAN RAHARJA PRATAMA</div>
+  <div class="sidebar-note"><strong>Catatan rapi.<br>Operasional terkendali.</strong><p>Kelola arus kas dan armada dalam satu ruang kerja.</p></div><div class="sidebar-footer">PT KYNAN RAHARJA PRATAMA</div>
 </nav>
 
 <!-- ============================================================
@@ -729,14 +893,11 @@ tbody tr:active { background: var(--bg); }
     </div>
 
     <div class="topbar-center">
-      <h1 class="topbar-main-title">Cash Flow – PT KYNAN RAHARJA PRATAMA</h1>
+      <h1 class="topbar-main-title">Cashflow KRP</h1>
     </div>
 
     <div class="topbar-right" style="gap:8px;">
-      <div id="dbStatusBadge" style="display:inline-flex; align-items:center; gap:6px; font-size:11px; background:#dcfce7; color:#15803d; padding:4px 9px; border-radius:20px; font-weight:600;" title="Sistem terhubung ke Database">
-        <span style="width:7px; height:7px; background:#22c55e; border-radius:50%; display:inline-block;"></span>
-        <span id="dbBadgeText">Database Aktif</span>
-      </div>
+
       <div id="userBadge" style="display:none; align-items:center; gap:6px;">
         <span id="userRoleBadge" class="badge" style="background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; font-size:11px; padding:4px 8px; border-radius:6px; font-weight:600;">👤 Admin</span>
         <button type="button" onclick="logout()" class="btn btn-sm btn-secondary" style="padding:4px 8px; font-size:11px; min-height:28px; border-radius:6px;" title="Keluar dari sistem">Keluar</button>
@@ -748,54 +909,53 @@ tbody tr:active { background: var(--bg); }
 
     <!-- ========== DASHBOARD ========== -->
     <div class="page active" id="page-dashboard">
+      <div class="page-heading"><div><div class="eyebrow">PT KYNAN RAHARJA PRATAMA</div><h2>Arus kas dalam kendali.</h2><p>Pantau kas dan operasional penyewaan truk Anda.</p></div><button class="btn btn-primary" onclick="nav('input')">＋ Catat transaksi</button></div>
+      <div class="section-caption"><span>Ringkasan keuangan</span><span id="d-period">Bulan berjalan</span></div>
       <div class="summary-grid">
         <div class="s-card c-blue">
-          <div class="s-icon">💰</div>
+          <div class="s-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="M16 11h5v5h-5zM6 5V3h11"/></svg></div>
           <div class="s-label">Saldo Kas</div>
           <div class="s-value t-blue" id="d-saldo">Rp 0</div>
-          <div class="s-sub">Total akumulasi</div>
+          <div class="s-sub">Saldo seluruh periode</div>
         </div>
         <div class="s-card c-green">
-          <div class="s-icon">📈</div>
-          <div class="s-label">Pendapatan</div>
+          <div class="s-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 17 14-14M10 3h9v9M4 21h16"/></svg></div>
+          <div class="s-label">Kas masuk bulan ini</div>
           <div class="s-value t-green" id="d-income">Rp 0</div>
           <div class="s-sub" id="d-income-n">Bulan ini</div>
         </div>
         <div class="s-card c-red">
-          <div class="s-icon">📉</div>
-          <div class="s-label">Pengeluaran</div>
+          <div class="s-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 3 14 14M10 17h9V8M4 21h16"/></svg></div>
+          <div class="s-label">Kas keluar bulan ini</div>
           <div class="s-value t-red" id="d-expense">Rp 0</div>
           <div class="s-sub" id="d-expense-n">Bulan ini</div>
         </div>
         <div class="s-card c-amber">
-          <div class="s-icon">🚛</div>
+          <div class="s-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v11H3zM14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></div>
           <div class="s-label">Armada</div>
           <div class="s-value" id="d-truck-nopol" style="font-size:13px;">–</div>
           <div class="s-sub" id="d-truck-info">Belum diisi</div>
         </div>
       </div>
 
-      <!-- Quick Action -->
-      <div style="margin-bottom:16px;">
-        <button class="btn btn-primary btn-full" onclick="nav('input')">➕ Input Transaksi Baru</button>
-      </div>
+
 
       <div class="g2">
         <div class="card">
-          <div class="card-title">⏱ Transaksi Terbaru</div>
+          <div class="card-title"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v5l3 2M9 2h6M12 2v3"/></svg> Transaksi Terbaru</div>
           <div id="d-recent-cards"></div>
         </div>
         <div class="card">
-          <div class="card-title">📊 Ringkasan Bulan Ini</div>
+          <div class="card-title">Hasil bulan berjalan</div>
           <div id="d-monthly-summary"></div>
         </div>
       </div>
     </div>
 
     <!-- ========== INPUT TRANSAKSI ========== -->
-    <div class="page" id="page-input">
+    <div class="page" id="page-input"><div class="page-heading"><div><div class="eyebrow">CATATAN OPERASIONAL</div><h2>Catat transaksi.</h2><p>Kas masuk dan keluar, lengkap dengan kategori dan penyewa.</p></div></div>
       <div class="card">
-        <div class="card-title">➕ Input Transaksi Baru</div>
+        <div class="card-title"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Input Transaksi Baru</div>
         <form id="formTrx" onsubmit="submitTrx(event)">
 
           <div class="fg" style="margin-bottom:16px;">
@@ -809,33 +969,33 @@ tbody tr:active { background: var(--bg); }
 
           <div class="f-grid">
             <div class="fg">
-              <label>Tanggal *</label>
+              <label for="trxDate">Tanggal *</label>
               <input type="date" id="trxDate" required>
             </div>
             <div class="fg">
-              <label>Nominal (Rp) *</label>
+              <label for="trxAmtDisplay">Nominal (Rp) *</label>
               <input type="text" id="trxAmtDisplay" placeholder="0" oninput="fmtAmt(this)" required autocomplete="off" inputmode="numeric">
               <input type="hidden" id="trxAmt">
             </div>
             <div class="fg">
-              <label>Kategori *</label>
+              <label for="trxCat">Kategori *</label>
               <select id="trxCat" required>
                 <option value="">-- Pilih Kategori --</option>
               </select>
             </div>
             <div class="fg" id="penyewaGroup">
-              <label>Nama Penyewa</label>
+              <label for="trxPenyewa">Nama Penyewa</label>
               <input type="text" id="trxPenyewa" placeholder="PT / CV / Perorangan">
             </div>
             <div class="fg" style="grid-column: 1 / -1;">
-              <label>Keterangan / Catatan</label>
+              <label for="trxDesc">Keterangan / Catatan</label>
               <textarea id="trxDesc" placeholder="Deskripsi tambahan (opsional)..."></textarea>
             </div>
           </div>
 
-          <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
-            <button type="submit" class="btn btn-primary btn-full">💾 Simpan Transaksi</button>
-            <button type="button" class="btn btn-secondary btn-full" onclick="resetForm()">🔄 Reset Form</button>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-full"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3h14l3 3v15H3V3zM7 3v6h10V3M7 21v-8h10v8"/></svg> Simpan Transaksi</button>
+            <button type="button" class="btn btn-secondary btn-full" onclick="resetForm()"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 8a8 8 0 0 0-14-3L3 8m0-5v5h5M4 16a8 8 0 0 0 14 3l3-3m0 5v-5h-5"/></svg> Reset Form</button>
           </div>
         </form>
       </div>
@@ -852,20 +1012,20 @@ tbody tr:active { background: var(--bg); }
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;" class="no-print">
-          <div class="card-title" style="margin:0;">📋 Riwayat Transaksi</div>
-          <button class="btn btn-outline btn-sm" onclick="window.print()">🖨️ Cetak Riwayat</button>
+          <div class="card-title" style="margin:0;"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v4H9zM9 12h6M9 16h6"/></svg> Riwayat Transaksi</div>
+          <button class="btn btn-outline btn-sm" onclick="window.print()"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 17H3V9h18v8h-3M6 14h12v7H6zM17 11h1"/></svg> Cetak Riwayat</button>
         </div>
 
         <!-- Filter accordion on mobile -->
         <details style="margin-bottom:12px;" class="no-print">
           <summary style="cursor:pointer; font-size:13.5px; font-weight:600; padding:10px 0; color:var(--primary); list-style:none; display:flex; align-items:center; gap:6px;">
-            🔍 Filter Transaksi
+            <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg> Filter Transaksi
           </summary>
           <div class="fbar" style="margin-top:10px;">
-            <div class="fg"><label>Dari Tanggal</label><input type="date" id="fFrom" onchange="renderRiwayat()"></div>
-            <div class="fg"><label>Sampai Tanggal</label><input type="date" id="fTo" onchange="renderRiwayat()"></div>
+            <div class="fg"><label for="fFrom">Dari Tanggal</label><input type="date" id="fFrom" onchange="renderRiwayat()"></div>
+            <div class="fg"><label for="fTo">Sampai Tanggal</label><input type="date" id="fTo" onchange="renderRiwayat()"></div>
             <div class="fg">
-              <label>Jenis</label>
+              <label for="fType">Jenis</label>
               <select id="fType" onchange="renderRiwayat()">
                 <option value="">Semua</option>
                 <option value="masuk">Kas Masuk</option>
@@ -873,10 +1033,10 @@ tbody tr:active { background: var(--bg); }
               </select>
             </div>
             <div class="fg">
-              <label>Kategori</label>
+              <label for="fCat">Kategori</label>
               <select id="fCat" onchange="renderRiwayat()"><option value="">Semua Kategori</option></select>
             </div>
-            <button class="btn btn-secondary btn-full" onclick="clearFilter()">🔄 Reset Filter</button>
+            <button class="btn btn-secondary btn-full" onclick="clearFilter()"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 8a8 8 0 0 0-14-3L3 8m0-5v5h5M4 16a8 8 0 0 0 14 3l3-3m0 5v-5h-5"/></svg> Reset Filter</button>
           </div>
         </details>
 
@@ -908,49 +1068,33 @@ tbody tr:active { background: var(--bg); }
     </div>
 
     <!-- ========== LAPORAN MINGGUAN ========== -->
-    <div class="page" id="page-mingguan">
-      <div class="card no-print" style="margin-bottom:14px;">
-        <div class="card-title" style="margin-bottom:12px;">📅 Laporan Mingguan</div>
-        <div class="fg" style="margin-bottom:12px;">
-          <label>Pilih Minggu</label>
-          <input type="week" id="weekPicker" onchange="renderMingguan()">
-        </div>
-        <button class="btn btn-outline btn-sm btn-full" onclick="window.print()">🖨️ Cetak Laporan</button>
-      </div>
+    <div class="page" id="page-mingguan"><div class="report-toolbar no-print"><div><div class="eyebrow">LAPORAN ARUS KAS</div><h2>Laporan mingguan</h2></div><div class="report-actions"><div class="fg"><label for="weekPicker">Pilih minggu</label><input type="week" id="weekPicker" onchange="renderMingguan()"></div><button class="btn btn-outline" onclick="window.print()"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 17H3V9h18v8h-3M6 14h12v7H6zM17 11h1"/></svg> Cetak laporan</button></div></div>
       <div id="mContent">
-        <div class="card empty"><div class="ei">📅</div><p>Pilih periode minggu<br>untuk melihat laporan</p></div>
+        <div class="card empty"><div class="ei"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 11h18M8 15h3"/></svg></div><p>Pilih periode minggu<br>untuk melihat laporan</p></div>
       </div>
     </div>
 
     <!-- ========== LAPORAN BULANAN ========== -->
-    <div class="page" id="page-bulanan">
-      <div class="card no-print" style="margin-bottom:14px;">
-        <div class="card-title" style="margin-bottom:12px;">📆 Laporan Bulanan</div>
-        <div class="fg" style="margin-bottom:12px;">
-          <label>Pilih Bulan</label>
-          <input type="month" id="monthPicker" onchange="renderBulanan()">
-        </div>
-        <button class="btn btn-outline btn-sm btn-full" onclick="window.print()">🖨️ Cetak Laporan</button>
-      </div>
+    <div class="page" id="page-bulanan"><div class="report-toolbar no-print"><div><div class="eyebrow">LAPORAN ARUS KAS</div><h2>Laporan bulanan</h2></div><div class="report-actions"><div class="fg"><label for="monthPicker">Pilih bulan</label><input type="month" id="monthPicker" onchange="renderBulanan()"></div><button class="btn btn-outline" onclick="window.print()"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 17H3V9h18v8h-3M6 14h12v7H6zM17 11h1"/></svg> Cetak laporan</button></div></div>
       <div id="bContent">
-        <div class="card empty"><div class="ei">📆</div><p>Pilih bulan untuk melihat<br>laporan arus kas</p></div>
+        <div class="card empty"><div class="ei"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 11h18M8 15h8M8 18h4"/></svg></div><p>Pilih bulan untuk melihat<br>laporan arus kas</p></div>
       </div>
     </div>
 
     <!-- ========== PENGATURAN ========== -->
-    <div class="page" id="page-pengaturan">
+    <div class="page" id="page-pengaturan"><div class="page-heading"><div><div class="eyebrow">RUANG KERJA KRP</div><h2>Pengaturan</h2><p>Armada, akun, dan pengelolaan data sesuai hak akses Anda.</p></div></div>
       <div class="g2">
         <!-- Card: Kelola Unit Armada (Full Width) -->
         <div class="card" style="grid-column: 1 / -1;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
             <div class="card-title" style="margin:0; display:flex; align-items:center; gap:8px;">
-              <span>🚛 Kelola Unit Armada</span>
+              <span><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v11H3zM14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Kelola Unit Armada</span>
               <span id="truckCountBadge" class="badge" style="background:#fef3c7; color:#92400e; font-size:11.5px; border:1px solid #fde68a;">0 Unit</span>
             </div>
-            <button type="button" class="btn btn-sm btn-primary owner-only" onclick="openTruckModal()">➕ Tambah Unit Armada</button>
+            <button type="button" class="btn btn-sm btn-primary owner-only" onclick="openTruckModal()"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Tambah Unit Armada</button>
           </div>
           <div style="font-size:12px; color:var(--text-muted); margin-bottom:14px; line-height:1.4;">
-            Kelola data kendaraan operasional PT KYNAN RAHARJA PRATAMA. Anda dapat menambahkan armada baru atau mengurangi/menghapus unit yang sudah tidak beroperasi.
+            Daftar kendaraan operasional PT KYNAN RAHARJA PRATAMA. Penambahan dan perubahan data armada dikelola oleh Owner.
           </div>
           <div id="trucksList">
             <div class="empty" style="padding:20px 0;"><div class="ei">⏳</div><p>Memuat daftar armada...</p></div>
@@ -959,75 +1103,77 @@ tbody tr:active { background: var(--bg); }
 
         <!-- Card: Ganti Password Akun Sendiri -->
         <div class="card">
-          <div class="card-title">🔐 Ganti Password Akun Saya</div>
+          <div class="card-title"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4M12 14v3"/></svg> Ganti Password Akun Saya</div>
           <form onsubmit="handleChangePassword(event)">
             <div class="fg" style="margin-bottom:12px;">
-              <label>Password Saat Ini *</label>
+              <label for="pwdOld">Password Saat Ini *</label>
               <input type="password" id="pwdOld" required placeholder="Masukkan password saat ini">
             </div>
             <div class="fg" style="margin-bottom:12px;">
-              <label>Password Baru *</label>
+              <label for="pwdNew">Password Baru *</label>
               <input type="password" id="pwdNew" required minlength="8" placeholder="Minimal 8 karakter">
             </div>
             <div class="fg" style="margin-bottom:16px;">
-              <label>Konfirmasi Password Baru *</label>
+              <label for="pwdConfirm">Konfirmasi Password Baru *</label>
               <input type="password" id="pwdConfirm" required minlength="8" placeholder="Ulangi password baru">
             </div>
-            <button type="submit" class="btn btn-primary btn-full">🔑 Perbarui Password Saya</button>
+            <button type="submit" class="btn btn-primary btn-full"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 9 9m-3-3 3-3m-6 0 3-3"/></svg> Perbarui Password Saya</button>
           </form>
         </div>
 
         <!-- Card: Ganti Password Admin (Owner Only) -->
         <div class="card owner-only">
-          <div class="card-title">🛡️ Ganti Password Akun Admin</div>
+          <div class="card-title"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 4v5c0 5-9 9-9 9S3 17 3 12V7zM8 12l3 3 5-6"/></svg> Ganti Password Akun Admin</div>
           <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:10px 12px; border-radius:8px; margin-bottom:14px; font-size:12px; color:#1e40af; line-height:1.4;">
             <strong>Khusus Owner:</strong> Anda dapat mengatur ulang kata sandi staf Admin operasional langsung tanpa memerlukan password lama mereka.
           </div>
           <form onsubmit="handleAdminPasswordChange(event)">
             <div class="fg" style="margin-bottom:12px;">
-              <label>Password Baru Admin *</label>
+              <label for="adminPwdNew">Password Baru Admin *</label>
               <input type="password" id="adminPwdNew" required minlength="8" placeholder="Minimal 8 karakter">
             </div>
             <div class="fg" style="margin-bottom:16px;">
-              <label>Konfirmasi Password Baru Admin *</label>
+              <label for="adminPwdConfirm">Konfirmasi Password Baru Admin *</label>
               <input type="password" id="adminPwdConfirm" required minlength="8" placeholder="Ulangi password baru admin">
             </div>
-            <button type="submit" id="btnSubmitAdminPwd" class="btn btn-primary btn-full">🔑 Simpan Password Admin Baru</button>
+            <button type="submit" id="btnSubmitAdminPwd" class="btn btn-primary btn-full"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 9 9m-3-3 3-3m-6 0 3-3"/></svg> Simpan Password Admin Baru</button>
           </form>
         </div>
 
         <!-- Card: Backup Database (Owner Only) -->
         <div class="card owner-only" id="ownerBackupCard">
-          <div class="card-title">🛡️ Backup &amp; Keamanan Database</div>
+          <div class="card-title"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 4v5c0 5-9 9-9 9S3 17 3 12V7zM8 12l3 3 5-6"/></svg> Backup &amp; Keamanan Database</div>
           <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:12px 14px; border-radius:10px; margin-bottom:14px; font-size:12.5px; color:#1e40af; line-height:1.5;">
-            <strong>✨ Tersimpan di Database:</strong> Seluruh transaksi Anda tersimpan aman dan terenkripsi pada server. Anda dapat mengunduh salinan cadangan JSON ke perangkat lokal kapan saja.
+            <strong>✨ Tersimpan di Database:</strong> Transaksi tersimpan pada database aplikasi. Anda dapat mengunduh salinan cadangan JSON ke perangkat lokal kapan saja.
           </div>
 
           <div style="display:flex; flex-direction:column; gap:12px;">
-            <button type="button" class="btn btn-secondary btn-full" onclick="exportData()">📥 Unduh Cadangan Database (.json)</button>
+            <button type="button" class="btn btn-secondary btn-full" onclick="exportData()"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M3 15v6h18v-6"/></svg> Unduh Cadangan Database (.json)</button>
 
             <div class="divider"></div>
-            <div class="card-title" style="font-size:14px;">📥 Pulihkan Data dari File Backup</div>
+            <div class="card-title" style="font-size:14px;"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M3 15v6h18v-6"/></svg> Pulihkan Data dari File Backup</div>
             <div class="fg">
-              <label>Pilih File Backup (.json) untuk Dipulihkan</label>
+              <label for="importFile">Pilih File Backup (.json) untuk Dipulihkan</label>
               <input type="file" id="importFile" accept=".json" onchange="importData(event)">
             </div>
 
             <div class="divider"></div>
             <p style="font-size:11.5px; color:var(--danger); font-weight:600;">⚠️ Zona Berbahaya (Owner Only): Tindakan ini akan menghapus semua riwayat transaksi dari database.</p>
-            <button type="button" class="btn btn-danger btn-full btn-sm" onclick="clearAll()">🗑️ Hapus Semua Data Transaksi</button>
+            <button type="button" class="btn btn-danger btn-full btn-sm" onclick="clearAll()"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V3h8v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></svg> Hapus Semua Data Transaksi</button>
           </div>
         </div>
 
         <!-- Card: Info Perusahaan & Sistem -->
         <div class="card">
-          <div class="card-title">🏢 Info Perusahaan &amp; Sistem</div>
+          <div class="card-title"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h1m4 0h1M9 11h1m4 0h1M9 15h1m4 0h1M10 21v-3h4v3"/></svg> Info Perusahaan &amp; Sistem</div>
           <div style="background:var(--bg); padding:12px 14px; border-radius:10px; font-size:13px; line-height:1.9;">
             <div><strong>Perusahaan:</strong> PT KYNAN RAHARJA PRATAMA</div>
             <div><strong>Bidang:</strong> Ekspedisi Penyewaan Truk Tanpa Sopir</div>
             <div><strong>Armada:</strong> <span id="infoArmadaCount">Memuat...</span></div>
-            <div><strong>Backend:</strong> Python 3.10 + FastAPI + PostgreSQL</div>
-            <div><strong>Versi Sistem:</strong> 2.1.0 (Fleet &amp; RBAC Enhanced)</div>
+            <details class="system-info"><summary>Informasi sistem</summary>      <div id="dbStatusBadge" style="display:inline-flex; align-items:center; gap:6px; font-size:11px; background:#dcfce7; color:#15803d; padding:4px 9px; border-radius:20px; font-weight:600;" title="Sistem terhubung ke Database">
+        <span style="width:7px; height:7px; background:#22c55e; border-radius:50%; display:inline-block;"></span>
+        <span id="dbBadgeText">Database Aktif</span>
+      </div><div><strong>Backend:</strong> FastAPI · PostgreSQL / SQLite</div><div><strong>Versi:</strong> 2.1.0</div></details>
           </div>
         </div>
       </div>
@@ -1042,22 +1188,22 @@ tbody tr:active { background: var(--bg); }
 <nav class="bottom-nav" id="bottomNav">
   <div class="bottom-nav-inner">
     <button class="bnav-item active" id="bn-dashboard"  onclick="nav('dashboard')">
-      <span class="bnav-icon">📊</span><span class="bnav-label">Dashboard</span>
+      <span class="bnav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="bnav-label">Dashboard</span>
     </button>
     <button class="bnav-item" id="bn-input"      onclick="nav('input')">
-      <span class="bnav-icon">➕</span><span class="bnav-label">Input</span>
+      <span class="bnav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span class="bnav-label">Input</span>
     </button>
     <button class="bnav-item" id="bn-riwayat"    onclick="nav('riwayat')">
-      <span class="bnav-icon">📋</span><span class="bnav-label">Riwayat</span>
+      <span class="bnav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v4H9zM9 12h6M9 16h6"/></svg></span><span class="bnav-label">Riwayat</span>
     </button>
     <button class="bnav-item" id="bn-mingguan"   onclick="nav('mingguan')">
-      <span class="bnav-icon">📅</span><span class="bnav-label">Mingguan</span>
+      <span class="bnav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 11h18M8 15h3"/></svg></span><span class="bnav-label">Mingguan</span>
     </button>
     <button class="bnav-item" id="bn-bulanan"    onclick="nav('bulanan')">
-      <span class="bnav-icon">📆</span><span class="bnav-label">Bulanan</span>
+      <span class="bnav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 11h18M8 15h8M8 18h4"/></svg></span><span class="bnav-label">Bulanan</span>
     </button>
     <button class="bnav-item" id="bn-pengaturan" onclick="nav('pengaturan')">
-      <span class="bnav-icon">⚙️</span><span class="bnav-label">Setelan</span>
+      <span class="bnav-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 3-1 3-3 1-2 5 2 5 3 1 1 3h6l1-3 3-1 2-5-2-5-3-1-1-3z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="bnav-label">Setelan</span>
     </button>
   </div>
 </nav>
@@ -1088,18 +1234,18 @@ tbody tr:active { background: var(--bg); }
 <div class="overlay" id="truckModal">
   <div class="modal" style="max-width:480px;">
     <div class="modal-head">
-      <h3 id="truckModalTitle">🚛 Tambah Unit Armada</h3>
+      <h3 id="truckModalTitle"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v11H3zM14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Tambah Unit Armada</h3>
       <button class="modal-x" onclick="closeModal('truckModal')">✕</button>
     </div>
     <form id="truckForm" onsubmit="submitTruckForm(event)">
       <div class="modal-body" style="padding:16px 20px;">
         <input type="hidden" id="tmId">
         <div class="fg" style="margin-bottom:12px;">
-          <label>Nomor Polisi (Plat Truk) *</label>
+          <label for="tmNopol">Nomor Polisi (Plat Truk) *</label>
           <input type="text" id="tmNopol" required placeholder="Contoh: B 9876 KRP" style="text-transform:uppercase;" autocomplete="off">
         </div>
         <div class="fg" style="margin-bottom:12px;">
-          <label>Jenis Truk *</label>
+          <label for="tmJenis">Jenis Truk *</label>
           <select id="tmJenis" required>
             <option value="Truk Fuso (CDD)">Truk Fuso (CDD)</option>
             <option value="Truk Engkel">Truk Engkel</option>
@@ -1112,15 +1258,15 @@ tbody tr:active { background: var(--bg); }
           </select>
         </div>
         <div class="fg" style="margin-bottom:12px;">
-          <label>Kapasitas Muatan</label>
+          <label for="tmKapasitas">Kapasitas Muatan</label>
           <input type="text" id="tmKapasitas" placeholder="Contoh: 8 Ton">
         </div>
         <div class="fg" style="margin-bottom:12px;">
-          <label>Tahun Kendaraan</label>
+          <label for="tmTahun">Tahun Kendaraan</label>
           <input type="number" id="tmTahun" placeholder="Contoh: 2023" min="1990" max="2035" inputmode="numeric">
         </div>
         <div class="fg" style="margin-bottom:12px;">
-          <label>Status Kepemilikan</label>
+          <label for="tmStatus">Status Kepemilikan</label>
           <select id="tmStatus">
             <option value="Milik Sendiri (Lunas)">Milik Sendiri (Lunas)</option>
             <option value="Kredit / Cicilan">Kredit / Cicilan</option>
@@ -1129,13 +1275,13 @@ tbody tr:active { background: var(--bg); }
           </select>
         </div>
         <div class="fg">
-          <label>Angsuran / Cicilan per Bulan</label>
+          <label for="tmCicilan">Angsuran / Cicilan per Bulan</label>
           <input type="text" id="tmCicilan" placeholder="Rp 0" oninput="fmtAmt(this)" inputmode="numeric">
         </div>
       </div>
       <div class="modal-foot">
         <button type="button" class="btn btn-secondary" onclick="closeModal('truckModal')">Batal</button>
-        <button type="submit" id="tmSubmitBtn" class="btn btn-primary">💾 Simpan Unit</button>
+        <button type="submit" id="tmSubmitBtn" class="btn btn-primary"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3h14l3 3v15H3V3zM7 3v6h10V3M7 21v-8h10v8"/></svg> Simpan Unit</button>
       </div>
     </form>
   </div>
@@ -1153,7 +1299,7 @@ tbody tr:active { background: var(--bg); }
     </div>
     <div class="modal-foot">
       <button type="button" class="btn btn-secondary" onclick="closeModal('delTruckModal')">Batal</button>
-      <button type="button" class="btn btn-danger" id="delTruckConfirmBtn" onclick="doDeleteTruck()">🗑️ Hapus Unit</button>
+      <button type="button" class="btn btn-danger" id="delTruckConfirmBtn" onclick="doDeleteTruck()"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V3h8v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></svg> Hapus Unit</button>
     </div>
   </div>
 </div>
@@ -1162,7 +1308,7 @@ tbody tr:active { background: var(--bg); }
 <div class="overlay" id="authOverlay">
   <div class="modal">
     <div class="modal-head" style="background:#1e3a8a; color:#ffffff; padding:18px 20px; display:block; text-align:center;">
-      <div style="font-size:24px; margin-bottom:4px;">🔐</div>
+      <div style="font-size:24px; margin-bottom:4px;"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4M12 14v3"/></svg></div>
       <h3 style="color:#ffffff; font-size:16px; font-weight:700; margin:0;">Masuk Sistem Cash Flow</h3>
       <div style="font-size:12px; color:rgba(255,255,255,0.8); margin-top:2px;">PT KYNAN RAHARJA PRATAMA</div>
     </div>
@@ -1185,7 +1331,7 @@ tbody tr:active { background: var(--bg); }
         </button>
       </form>
       <div style="margin-top:14px; font-size:11px; color:var(--text-muted); text-align:center; line-height:1.4;">
-        🛡️ Sistem terproteksi enkripsi bcrypt &amp; rate-limiting anti brute-force.
+        <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 4v5c0 5-9 9-9 9S3 17 3 12V7zM8 12l3 3 5-6"/></svg> Sistem terproteksi enkripsi bcrypt &amp; rate-limiting anti brute-force.
       </div>
     </div>
   </div>
@@ -1489,7 +1635,7 @@ async function checkAuth() {
 // ============================================================
 // HELPERS
 // ============================================================
-const rp    = n => 'Rp ' + Math.abs(+n||0).toLocaleString('id-ID');
+const rp    = n => ((+n||0)<0?'− Rp ':'Rp ') + Math.abs(+n||0).toLocaleString('id-ID');
 const rpRaw = s => parseInt(String(s).replace(/\D/g,''))||0;
 const today = () => new Date().toISOString().slice(0,10);
 const mKey  = s => s ? s.slice(0,7) : '';
@@ -1606,29 +1752,16 @@ async function renderDash() {
           </div>
         </div>`).join('').replace(/border-bottom[^;]+;(?=[^}]*<\/div>\s*$)/,'');
 
-    // Monthly summary
+    // Show the net result once; income and expense already appear above.
     const net = data.net_month;
-    const mn  = data.month_name;
-    const sEl = $('d-monthly-summary');
-    if (data.income_month === 0 && data.expense_month === 0) {
-      sEl.innerHTML = `<div class="empty"><div class="ei">📭</div><p>Belum ada data ${mn} ${data.year}</p></div>`;
-    } else {
-      sEl.innerHTML = `
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
-          <div style="background:#d1fae5; padding:13px 10px; border-radius:10px; text-align:center;">
-            <div style="font-size:10px; font-weight:700; color:#065f46; margin-bottom:4px;">PENDAPATAN</div>
-            <div style="font-size:15px; font-weight:800; color:#065f46;">${rp(data.income_month)}</div>
-          </div>
-          <div style="background:#fee2e2; padding:13px 10px; border-radius:10px; text-align:center;">
-            <div style="font-size:10px; font-weight:700; color:#991b1b; margin-bottom:4px;">PENGELUARAN</div>
-            <div style="font-size:15px; font-weight:800; color:#991b1b;">${rp(data.expense_month)}</div>
-          </div>
-        </div>
-        <div style="background:${net>=0?'#dbeafe':'#fee2e2'}; padding:13px; border-radius:10px; text-align:center;">
-          <div style="font-size:10px; font-weight:700; color:${net>=0?'#1e40af':'#991b1b'}; margin-bottom:4px;">KAS BERSIH ${mn.toUpperCase()} ${data.year}</div>
-          <div style="font-size:20px; font-weight:800; color:${net>=0?'#1e40af':'#991b1b'};">${net>=0?'+':''}${rp(net)}</div>
-        </div>`;
-    }
+    $('d-period').textContent = `${data.month_name} ${data.year}`;
+    $('d-income-n').textContent = `${data.month_name} ${data.year}`;
+    $('d-expense-n').textContent = `${data.month_name} ${data.year}`;
+    $('d-monthly-summary').innerHTML = `
+      <div class="net-result"><span>Selisih kas masuk dan keluar</span>
+      <strong style="color:${net>=0?'var(--primary)':'var(--danger)'}">${rp(net)}</strong>
+      <p>${data.income_month===0 && data.expense_month===0 ? 'Belum ada transaksi bulan ini.' : net>=0 ? 'Kas masuk melebihi atau sama dengan kas keluar bulan ini.' : 'Kas keluar melebihi kas masuk bulan ini.'}</p></div>
+      <button class="btn btn-outline btn-full" onclick="nav('bulanan')">Lihat rincian laporan →</button>`;
   } catch (err) {
     console.error('Error renderDash:', err);
   }
@@ -1711,7 +1844,7 @@ async function renderRiwayat() {
 
     const cardList = document.getElementById('rCardList');
     if (trx.length===0) {
-      cardList.innerHTML = '<div class="empty"><div class="ei">🔍</div><p>Tidak ada transaksi ditemukan</p></div>';
+      cardList.innerHTML = '<div class="empty"><div class="ei"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg></div><p>Tidak ada transaksi ditemukan</p></div>';
       document.getElementById('rBody').innerHTML = emptyRow(8,'Tidak ada transaksi');
       return;
     }
@@ -1732,7 +1865,7 @@ async function renderRiwayat() {
           <div style="font-size:14px; font-weight:700; color:${t.type==='masuk'?'var(--success)':'var(--danger)'}; white-space:nowrap;">
             ${t.type==='masuk'?'+':'–'} ${rp(t.amount)}
           </div>
-          ${canDelete(t) ? `<button onclick="confirmDel('${t.id}')" style="background:none; border:none; color:var(--danger); font-size:16px; cursor:pointer; padding:4px; margin-top:2px;" title="Hapus">🗑️</button>` : ''}
+          ${canDelete(t) ? `<button onclick="confirmDel('${t.id}')" style="background:none; border:none; color:var(--danger); font-size:16px; cursor:pointer; padding:4px; margin-top:2px;" title="Hapus"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V3h8v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></svg></button>` : ''}
         </div>
       </div>`).join('');
 
@@ -1749,7 +1882,7 @@ async function renderRiwayat() {
           ${t.type==='masuk'?'+':'–'} ${rp(t.amount)}
         </td>
         <td class="no-print">
-          ${canDelete(t) ? `<button class="btn btn-danger btn-sm" onclick="confirmDel('${t.id}')">🗑️</button>` : '<span style="font-size:11px; color:var(--text-muted);">–</span>'}
+          ${canDelete(t) ? `<button class="btn btn-danger btn-sm" onclick="confirmDel('${t.id}')"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V3h8v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></svg></button>` : '<span style="font-size:11px; color:var(--text-muted);">–</span>'}
         </td>
       </tr>`).join('');
 
@@ -1885,7 +2018,7 @@ async function renderMingguan() {
       </div>
 
       <div class="card">
-        <div class="card-title">📊 Ringkasan</div>
+        <div class="card-title"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Ringkasan</div>
         ${[
           ['Saldo Awal', rp(sa), ''],
           ['+ Total Kas Masuk', '+ '+rp(tM), 'var(--success)'],
@@ -1986,18 +2119,18 @@ async function renderBulanan() {
       <!-- Breakdown per Kategori -->
       <div class="g2" style="margin-bottom:14px;">
         <div class="card">
-          <div class="card-title" style="color:var(--success);">📈 Rincian Pendapatan</div>
+          <div class="card-title" style="color:var(--success);"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 17 14-14M10 3h9v9M4 21h16"/></svg> Rincian Pendapatan</div>
           ${catCards(data.categories_masuk, tM, 'var(--success)')}
         </div>
         <div class="card">
-          <div class="card-title" style="color:var(--danger);">📉 Rincian Pengeluaran</div>
+          <div class="card-title" style="color:var(--danger);"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 3 14 14M10 17h9V8M4 21h16"/></svg> Rincian Pengeluaran</div>
           ${catCards(data.categories_keluar, tK, 'var(--danger)')}
         </div>
       </div>
 
       <!-- Cash Flow Statement (for print) -->
       <div class="card" style="margin-bottom:14px;">
-        <div class="card-title">📋 Laporan Arus Kas – ${mn} ${yr}</div>
+        <div class="card-title"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v4H9zM9 12h6M9 16h6"/></svg> Laporan Arus Kas – ${mn} ${yr}</div>
         <div class="tbl-wrap"><table><tbody>
           <tr style="background:var(--bg);"><td colspan="2" style="font-weight:700;">SALDO AWAL (1 ${mn} ${yr})</td><td class="tr" style="font-weight:700;">${rp(sa)}</td></tr>
           <tr><td colspan="3" style="padding:0;height:3px;background:var(--border);"></td></tr>
@@ -2015,7 +2148,7 @@ async function renderBulanan() {
 
       <!-- Daily Detail -->
       <div class="card">
-        <div class="card-title">📅 Rincian Harian</div>
+        <div class="card-title"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 11h18M8 15h3"/></svg> Rincian Harian</div>
         ${data.daily.length===0
           ? `<div class="empty"><div class="ei">📭</div><p>Tidak ada transaksi ${mn} ${yr}</p></div>`
           : data.daily.map(v=>{
@@ -2071,9 +2204,9 @@ function renderTrucksList() {
   if (!currentTrucks || currentTrucks.length === 0) {
     container.innerHTML = `
       <div class="empty" style="padding:22px 10px;">
-        <div class="ei" style="font-size:32px;">🚛</div>
+        <div class="ei" style="font-size:32px;"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v11H3zM14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></div>
         <p style="margin:4px 0 10px;">Belum ada unit armada terdaftar.</p>
-        ${isOwner ? `<button type="button" class="btn btn-sm btn-primary" onclick="openTruckModal()">➕ Tambah Unit Pertama</button>` : ''}
+        ${isOwner ? `<button type="button" class="btn btn-sm btn-primary" onclick="openTruckModal()"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Tambah Unit Pertama</button>` : ''}
       </div>`;
     return;
   }
@@ -2082,7 +2215,7 @@ function renderTrucksList() {
     <div style="background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
       <div style="flex:1; min-width:200px;">
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px; flex-wrap:wrap;">
-          <span style="font-size:16px;">🚛</span>
+          <span style="font-size:16px;"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v11H3zM14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
           <span style="font-weight:800; font-size:14px; color:var(--text); letter-spacing:0.5px;">${t.nopol}</span>
           <span class="badge" style="background:#e0f2fe; color:#0369a1; font-size:10.5px;">${t.jenis || 'Truk'}</span>
           <span class="badge" style="background:#dcfce7; color:#15803d; font-size:10.5px;">${t.status || 'Milik Sendiri'}</span>
@@ -2096,7 +2229,7 @@ function renderTrucksList() {
       ${isOwner ? `
       <div style="display:flex; gap:6px; flex-shrink:0;">
         <button type="button" class="btn btn-sm btn-secondary" onclick="editTruck(${t.id})" style="padding:5px 10px; font-size:11.5px; border-radius:6px;" title="Ubah data unit">✏️ Edit</button>
-        <button type="button" class="btn btn-sm btn-danger" onclick="confirmDeleteTruck(${t.id}, '${t.nopol}')" style="padding:5px 10px; font-size:11.5px; border-radius:6px;" title="Kurangi / hapus unit">🗑️ Hapus</button>
+        <button type="button" class="btn btn-sm btn-danger" onclick="confirmDeleteTruck(${t.id}, '${t.nopol}')" style="padding:5px 10px; font-size:11.5px; border-radius:6px;" title="Kurangi / hapus unit"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V3h8v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></svg> Hapus</button>
       </div>` : ''}
     </div>
   `).join('');
